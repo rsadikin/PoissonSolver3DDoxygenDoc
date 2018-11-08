@@ -1,0 +1,1946 @@
+\hypertarget{PoissonSolver3DGPU_8cu}{}\section{Referensi File /home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/kernel/\+Poisson\+Solver3\+D\+G\+PU.cu}
+\label{PoissonSolver3DGPU_8cu}\index{/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/kernel/\+Poisson\+Solver3\+D\+G\+P\+U.\+cu@{/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/kernel/\+Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+
+
+Berkas ini berisi implementasi kernel dalam cuda untuk Poisson\+Solver Cylindrical berbasis Multigrid.  
+
+
+{\ttfamily \#include \char`\"{}Poisson\+Solver3\+D\+G\+P\+U.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cuda.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+\subsection*{Fungsi}
+\begin{DoxyCompactItemize}
+\item 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void \hyperlink{PoissonSolver3DGPU_8cu_a6717666a25f968bb1d43300401b2fefb}{relaxation\+Gauss\+Seidel\+Red} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, const int R\+Row, const int Z\+Column, const int Phi\+Slice, float $\ast$coef1, float $\ast$coef2, float $\ast$coef3, float $\ast$coef4)
+\item 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void \hyperlink{PoissonSolver3DGPU_8cu_a982f277a379105d427d851806c8ba49b}{relaxation\+Gauss\+Seidel\+Black} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, const int R\+Row, const int Z\+Column, const int Phi\+Slice, float $\ast$coef1, float $\ast$coef2, float $\ast$coef3, float $\ast$coef4)
+\item 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void \hyperlink{PoissonSolver3DGPU_8cu_a18166fae41f28362a43f5f09f3ddb537}{residue\+Calculation} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, float $\ast$Delta\+Residue, const int R\+Row, const int Z\+Column, const int Phi\+Slice, float $\ast$coef1, float $\ast$coef2, float $\ast$coef3, float $\ast$icoef4)
+\item 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void \hyperlink{PoissonSolver3DGPU_8cu_a249cfc3540088682931971eada57399c}{restriction2\+D\+Full} (float $\ast$Rho\+Charge\+Density, float $\ast$Delta\+Residue, const int R\+Row, const int Z\+Column, const int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_abc71b2402c0280e8d4cac1cf8673f335}{}\label{PoissonSolver3DGPU_8cu_abc71b2402c0280e8d4cac1cf8673f335} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries zeroing\+V\+Potential} (float $\ast$V\+Potential, const int R\+Row, const int Z\+Column, const int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a29b414b196e1406b97712de93ea3c648}{}\label{PoissonSolver3DGPU_8cu_a29b414b196e1406b97712de93ea3c648} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries zeroing\+Boundary\+Top\+Bottom} (float $\ast$V\+Potential, int R\+Row, int Z\+Column, int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a3a2c7f5369730745ba25aaee17c08a61}{}\label{PoissonSolver3DGPU_8cu_a3a2c7f5369730745ba25aaee17c08a61} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries zeroing\+Boundary\+Left\+Right} (float $\ast$V\+Potential, int R\+Row, int Z\+Column, int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_ad39e3fa5c2547b51ede30cc489cbe1cd}{}\label{PoissonSolver3DGPU_8cu_ad39e3fa5c2547b51ede30cc489cbe1cd} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries prolongation2\+D\+Half} (float $\ast$V\+Potential, const int R\+Row, const int Z\+Column, const int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a3bfd3f6601aee313d79eceec81ac54a2}{}\label{PoissonSolver3DGPU_8cu_a3bfd3f6601aee313d79eceec81ac54a2} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries prolongation2\+D\+Half\+No\+Add} (float $\ast$V\+Potential, const int R\+Row, const int Z\+Column, const int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a8e66b4708f14a622db5dff6317c48eef}{}\label{PoissonSolver3DGPU_8cu_a8e66b4708f14a622db5dff6317c48eef} 
+\+\_\+\+\_\+global\+\_\+\+\_\+ void {\bfseries error\+Calculation} (float $\ast$V\+Potential\+Prev, float $\ast$V\+Potential, float $\ast$Epsilon\+Error, const int R\+Row, const int Z\+Column, const int Phi\+Slice)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_aa63aea02197f4ab9fddc71761568b5d4}{}\label{PoissonSolver3DGPU_8cu_aa63aea02197f4ab9fddc71761568b5d4} 
+float {\bfseries Get\+Error\+Norm2} (float $\ast$V\+Potential, float $\ast$V\+Potential\+Prev, const int rows, const int cols, float weight)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_aa26dfc9c29c286cfa54a539b131aecd7}{}\label{PoissonSolver3DGPU_8cu_aa26dfc9c29c286cfa54a539b131aecd7} 
+float {\bfseries Get\+Abs\+Max} (float $\ast$V\+Potential\+Exact, int size)
+\item 
+void \hyperlink{PoissonSolver3DGPU_8cu_a1b6e721fb1d6d9d4155465f1af16c8aa}{Restrict\+\_\+\+Boundary} (float $\ast$V\+Potential, const int R\+Row, const int Z\+Column, const int Phi\+Slice, const int Offset)
+\item 
+void \hyperlink{PoissonSolver3DGPU_8cu_ae81f622f6c82ae791ba4bf486243c0e5}{Print\+Matrix} (float $\ast$Mat, const int Row, const int Column)
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_af1cb203004a7ed980bcf3fb0279db24f}{}\label{PoissonSolver3DGPU_8cu_af1cb203004a7ed980bcf3fb0279db24f} 
+void {\bfseries V\+Cycle\+Semi\+Coarsening\+G\+PU} (float $\ast$d\+\_\+\+V\+Potential, float $\ast$d\+\_\+\+Rho\+Charge\+Density, float $\ast$d\+\_\+\+Delta\+Residue, float $\ast$d\+\_\+coef1, float $\ast$d\+\_\+coef2, float $\ast$d\+\_\+coef3, float $\ast$d\+\_\+coef4, float $\ast$d\+\_\+icoef4, float grid\+SizeR, float ratioZ, float ratio\+Phi, int R\+Row, int Z\+Column, int Phi\+Slice, int grid\+From, int grid\+To, int n\+Pre, int n\+Post)
+\item 
+void \hyperlink{PoissonSolver3DGPU_8cu_a06ab6e8b953038a4d4d4ea5e1ab646e8}{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, const int R\+Row, const int Z\+Column, const int Phi\+Slice, const int Symmetry, float $\ast$fparam, int $\ast$iparam, bool is\+Exact\+Present, float $\ast$error\+Conv, float $\ast$error\+Exact, float $\ast$V\+Potential\+Exact)
+\item 
+void \hyperlink{PoissonSolver3DGPU_8cu_a29ff8c657a945ecbeeb7b219169d09c6}{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, const int R\+Row, const int Z\+Column, const int Phi\+Slice, const int Symmetry, float $\ast$fparam, int $\ast$iparam, float $\ast$error\+Conv, float $\ast$error\+Exact, float $\ast$V\+Potential\+Exact)
+\item 
+void \hyperlink{PoissonSolver3DGPU_8cu_a2a1da5844b8c399a35f446977c7ac550}{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle} (float $\ast$V\+Potential, float $\ast$Rho\+Charge\+Density, const int R\+Row, const int Z\+Column, const int Phi\+Slice, const int Symmetry, float $\ast$fparam, int $\ast$iparam, bool is\+Exact\+Present, float $\ast$error\+Conv, float $\ast$error\+Exact, float $\ast$V\+Potential\+Exact)
+\end{DoxyCompactItemize}
+\subsection*{Variabel}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a1cbbf8dba207c28461994cbff905e3e1}{}\label{PoissonSolver3DGPU_8cu_a1cbbf8dba207c28461994cbff905e3e1} 
+\+\_\+\+\_\+device\+\_\+\+\_\+ \+\_\+\+\_\+constant\+\_\+\+\_\+ int {\bfseries d\+\_\+coef\+\_\+\+Start\+Pos}
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a779b816911e646fe3fa1319351101eeb}{}\label{PoissonSolver3DGPU_8cu_a779b816911e646fe3fa1319351101eeb} 
+\+\_\+\+\_\+device\+\_\+\+\_\+ \+\_\+\+\_\+constant\+\_\+\+\_\+ int {\bfseries d\+\_\+grid\+\_\+\+Start\+Pos}
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_ad1269e072248aae5eb29b6d30b7b7ff5}{}\label{PoissonSolver3DGPU_8cu_ad1269e072248aae5eb29b6d30b7b7ff5} 
+\+\_\+\+\_\+device\+\_\+\+\_\+ \+\_\+\+\_\+constant\+\_\+\+\_\+ float {\bfseries d\+\_\+h2}
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_abf21eece0795b48b20b73e225124303d}{}\label{PoissonSolver3DGPU_8cu_abf21eece0795b48b20b73e225124303d} 
+\+\_\+\+\_\+device\+\_\+\+\_\+ \+\_\+\+\_\+constant\+\_\+\+\_\+ float {\bfseries d\+\_\+ih2}
+\item 
+\hypertarget{PoissonSolver3DGPU_8cu_a5cf69956b171a8c4ce44aba5ef46440e}{}\label{PoissonSolver3DGPU_8cu_a5cf69956b171a8c4ce44aba5ef46440e} 
+\+\_\+\+\_\+device\+\_\+\+\_\+ \+\_\+\+\_\+constant\+\_\+\+\_\+ float {\bfseries d\+\_\+temp\+RatioZ}
+\end{DoxyCompactItemize}
+
+
+\subsection{Keterangan Lengkap}
+Berkas ini berisi implementasi kernel dalam cuda untuk Poisson\+Solver Cylindrical berbasis Multigrid. 
+
+\begin{DoxyAuthor}{Penulis}
+Rifki Sadikin \href{mailto:rifki.sadikin@lipi.go.id}{\tt rifki.\+sadikin@lipi.\+go.\+id}, Pusat Penelitian Informatika, Lembaga Ilmu Pengetahuan Indonesia 
+
+I Wayan Aditya Swardiana \href{mailto:i.wayan.aditya.swardiana@lipi.go.id}{\tt i.\+wayan.\+aditya.\+swardiana@lipi.\+go.\+id}, Pusat Penelitian Informatika, Lembaga Ilmu Pengetahuan Indonesia 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Tanggal}
+November 8, 2018 
+\end{DoxyDate}
+
+
+\subsection{Dokumentasi Fungsi}
+\hypertarget{PoissonSolver3DGPU_8cu_a06ab6e8b953038a4d4d4ea5e1ab646e8}{}\label{PoissonSolver3DGPU_8cu_a06ab6e8b953038a4d4d4ea5e1ab646e8} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error}}
+\index{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error()}{PoissonMultigrid3DSemiCoarseningGPUError()}}
+{\footnotesize\ttfamily void Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{const int}]{Symmetry,  }\item[{float $\ast$}]{fparam,  }\item[{int $\ast$}]{iparam,  }\item[{bool}]{is\+Exact\+Present,  }\item[{float $\ast$}]{error\+Conv,  }\item[{float $\ast$}]{error\+Exact,  }\item[{float $\ast$}]{V\+Potential\+Exact }\end{DoxyParamCaption})}
+
+Fungsi ini menghitung solusi terhadap Persamaan Poisson
+
+\[ \nabla^{2}(r,\phi,z) = \rho(r,\phi,z) \]
+
+dengan diketahui nilai tepi (Boundary Value) pada $V$ (potensial) dan distribusi buatan $\rho$
+
+
+\begin{DoxyParams}[1]{Parameter}
+\mbox{\tt in,out}  & {\em V\+Potential} & float\mbox{[}nrows$\ast$ncols$\ast$nphi\mbox{]} distribusi potensial. Input\+: hanya nilai tepi. Output\+: hasil perhitungan penyelesaian persamaan Poisson \\
+\hline
+\mbox{\tt in}  & {\em Rho\+Change\+Density} & float\mbox{[}nrows$\ast$ncols$\ast$nphi\mbox{]} distributsi muatan listrik.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Mengembalikan}
+A fixed number that has nothing to do with what the function does 
+\end{DoxyReturn}
+
+
+Definisi pada baris 893 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+907 \{
+908     \textcolor{comment}{// variables for CPU memory}
+909     \textcolor{keywordtype}{float} *temp\_VPotential;
+910     \textcolor{keywordtype}{float} *VPotentialPrev;
+911     \textcolor{keywordtype}{float} *EpsilonError;    
+912 
+913     \textcolor{comment}{// variables for GPU memory }
+914     \textcolor{keywordtype}{float} *d\_VPotential;
+915     \textcolor{keywordtype}{float} *d\_RhoChargeDensity;
+916     \textcolor{keywordtype}{float} *d\_DeltaResidue;
+917     \textcolor{keywordtype}{float} *d\_VPotentialPrev;
+918     \textcolor{keywordtype}{float} *d\_EpsilonError;
+919     
+920     \textcolor{keywordtype}{float} *d\_coef1;
+921     \textcolor{keywordtype}{float} *d\_coef2;
+922     \textcolor{keywordtype}{float} *d\_coef3;
+923     \textcolor{keywordtype}{float} *d\_coef4;
+924     \textcolor{keywordtype}{float} *d\_icoef4;
+925 
+926     \textcolor{comment}{// variables for coefficent calculations}
+927     \textcolor{keywordtype}{float} *coef1;
+928     \textcolor{keywordtype}{float} *coef2;
+929     \textcolor{keywordtype}{float} *coef3;
+930     \textcolor{keywordtype}{float} *coef4;
+931     \textcolor{keywordtype}{float} *icoef4;
+932     \textcolor{keywordtype}{float} tempRatioZ;
+933     \textcolor{keywordtype}{float} tempRatioPhi;
+934     \textcolor{keywordtype}{float} radius;
+935 
+936     \textcolor{keywordtype}{int} gridFrom;
+937     \textcolor{keywordtype}{int} gridTo; 
+938     \textcolor{keywordtype}{int} loops;
+939 
+940 
+941     \textcolor{comment}{// variables passed from ALIROOT}
+942     \textcolor{keywordtype}{float} gridSizeR     = fparam[0];
+943     \textcolor{keywordtype}{float} gridSizePhi   = fparam[1];
+944     \textcolor{keywordtype}{float} gridSizeZ     = fparam[2];
+945     \textcolor{keywordtype}{float} ratioPhi      = fparam[3];
+946     \textcolor{keywordtype}{float} ratioZ        = fparam[4];
+947     \textcolor{keywordtype}{float} convErr       = fparam[5];
+948     \textcolor{keywordtype}{float} IFCRadius     = fparam[6];
+949     \textcolor{keywordtype}{int} nPre        = iparam[0];
+950     \textcolor{keywordtype}{int} nPost       = iparam[1];
+951     \textcolor{keywordtype}{int} maxLoop     = iparam[2];
+952     \textcolor{keywordtype}{int} nCycle      = iparam[3];
+953 
+954     \textcolor{comment}{// variables for calculating GPU memory allocation}
+955     \textcolor{keywordtype}{int} grid\_RRow;
+956     \textcolor{keywordtype}{int} grid\_ZColumn;
+957     \textcolor{keywordtype}{int} grid\_PhiSlice = PhiSlice;
+958     \textcolor{keywordtype}{int} grid\_Size = 0;
+959     \textcolor{keywordtype}{int} grid\_StartPos;
+960     \textcolor{keywordtype}{int} coef\_Size = 0;
+961     \textcolor{keywordtype}{int} coef\_StartPos;
+962     \textcolor{keywordtype}{int} iOne, jOne;
+963     \textcolor{keywordtype}{float} h, h2, ih2;
+964 
+965     \textcolor{comment}{// variables for calculating multigrid maximum depth}
+966     \textcolor{keywordtype}{int} depth\_RRow = 0;
+967     \textcolor{keywordtype}{int} depth\_ZColumn = 0;
+968     \textcolor{keywordtype}{int} temp\_RRow = RRow;
+969     \textcolor{keywordtype}{int} temp\_ZColumn = ZColumn;
+970 
+971     \textcolor{comment}{// calculate depth for multigrid}
+972     \textcolor{keywordflow}{while} (temp\_RRow >>= 1) depth\_RRow++;  
+973     \textcolor{keywordflow}{while} (temp\_ZColumn >>= 1) depth\_ZColumn++;
+974   
+975     loops = (depth\_RRow > depth\_ZColumn) ? depth\_ZColumn : depth\_RRow;
+976     loops = (loops > maxLoop) ? maxLoop : loops;
+977 
+978     gridFrom = 1;
+979     gridTo = loops;
+980 
+981     \textcolor{comment}{// calculate GPU memory allocation for multigrid}
+982     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+983     \{
+984         grid\_RRow = ((RRow - 1) / (1 << (step - 1))) + 1;
+985         grid\_ZColumn = ((ZColumn - 1) / (1 << (step - 1))) + 1;
+986         
+987         grid\_Size += grid\_RRow * grid\_ZColumn * grid\_PhiSlice;
+988         coef\_Size += grid\_RRow;
+989     \}
+990 
+991     \textcolor{comment}{// allocate memory for temporary output}
+992     temp\_VPotential         = (\textcolor{keywordtype}{float} *) malloc(grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+993     VPotentialPrev = (\textcolor{keywordtype}{float} *) malloc(RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+994     EpsilonError = (\textcolor{keywordtype}{float} *) malloc(1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+995 
+996 
+997     \textcolor{comment}{// allocate memory for relaxation coefficient}
+998     coef1 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+999     coef2 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1000     coef3 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1001     coef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1002     icoef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1003 
+1004     \textcolor{comment}{// pre-compute relaxation coefficient}
+1005     coef\_StartPos = 0;
+1006     iOne = 1 << (gridFrom - 1); 
+1007     jOne = 1 << (gridFrom - 1);
+1008     
+1009     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+1010     \{
+1011         grid\_RRow = ((RRow - 1) / iOne) + 1;
+1012 
+1013         h = gridSizeR * iOne;
+1014         h2 = h * h;
+1015         ih2 = 1.0 / h2;
+1016 
+1017         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1018         tempRatioPhi = ratioPhi * iOne * iOne;
+1019 
+1020         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < grid\_RRow - 1; i++)
+1021         \{
+1022             radius = IFCRadius + i * h;
+1023             coef1[coef\_StartPos + i] = 1.0 + h / (2 * radius);
+1024             coef2[coef\_StartPos + i] = 1.0 - h / (2 * radius);
+1025             coef3[coef\_StartPos + i] = tempRatioPhi / (radius * radius);
+1026             coef4[coef\_StartPos + i] = 0.5 / (1.0 + tempRatioZ + coef3[coef\_StartPos + i]);
+1027             icoef4[coef\_StartPos + i] = 1.0 / coef4[coef\_StartPos + i];
+1028         \}
+1029         coef\_StartPos += grid\_RRow;
+1030         iOne = 2 * iOne;
+1031         jOne = 2 * jOne;
+1032     \}
+1033 
+1034     \textcolor{comment}{// device memory allocation}
+1035     cudaMalloc( &d\_VPotential, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1036     cudaMalloc( &d\_VPotentialPrev, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1037     cudaMalloc( &d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );   
+1038     cudaMalloc( &d\_DeltaResidue, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1039     cudaMalloc( &d\_RhoChargeDensity, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1040     cudaMalloc( &d\_coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1041     cudaMalloc( &d\_coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1042     cudaMalloc( &d\_coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1043     cudaMalloc( &d\_coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1044     cudaMalloc( &d\_icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1045 
+1046     \textcolor{comment}{// set memory to zero}
+1047     cudaMemset( d\_VPotential, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1048     cudaMemset( d\_DeltaResidue, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1049     cudaMemset( d\_RhoChargeDensity, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1050     cudaMemset( d\_VPotentialPrev, 0, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1051     cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1052 
+1053 
+1054     \textcolor{comment}{// copy data from host to device}
+1055     cudaMemcpy( d\_VPotential, VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice
+       ); \textcolor{comment}{//check}
+1056     cudaMemcpy( d\_RhoChargeDensity, RhoChargeDensity, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyHostToDevice ); \textcolor{comment}{//check}
+1057     cudaMemcpy( d\_coef1, coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1058     cudaMemcpy( d\_coef2, coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1059     cudaMemcpy( d\_coef3, coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1060     cudaMemcpy( d\_coef4, coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1061     cudaMemcpy( d\_icoef4, icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1062     cudaMemcpy( d\_VPotentialPrev, VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyHostToDevice );
+1063     
+1064     \textcolor{comment}{// max exact}
+1065     
+1066     \textcolor{comment}{// float maxAbsExact = GetAbsMax(VPotentialExact, RRow * PhiSlice * ZColumn);}
+1067     \textcolor{keywordtype}{float} maxAbsExact = 1.0;
+1068 
+1069     \textcolor{keywordflow}{if} (isExactPresent == \textcolor{keyword}{true})
+1070         maxAbsExact = GetAbsMax(VPotentialExact, RRow * PhiSlice * ZColumn);
+1071     dim3 error\_BlockPerGrid((RRow < 16) ? 1 : (RRow / 16), (ZColumn < 16) ? 1 : (ZColumn / 16), PhiSlice);
+1072     dim3 error\_ThreadPerBlock(16, 16);      
+1073 
+1074     
+1075     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} cycle = 0; cycle < nCycle; cycle++)
+1076     \{
+1077         cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+1078         \textcolor{keywordflow}{if} (isExactPresent == \textcolor{keyword}{true}) errorExact[cycle] = GetErrorNorm2(temp\_VPotential, VPotentialExact, 
+      RRow * PhiSlice,ZColumn, maxAbsExact); 
+1079 
+1080 
+1081         VCycleSemiCoarseningGPU(d\_VPotential, d\_RhoChargeDensity, d\_DeltaResidue, d\_coef1, d\_coef2, d\_coef3
+      , d\_coef4, d\_icoef4, gridSizeR, ratioZ, ratioPhi, RRow, ZColumn, PhiSlice, gridFrom, gridTo, nPre, nPost);
+1082         
+1083 
+1084         errorCalculation<<< error\_BlockPerGrid, error\_ThreadPerBlock >>> ( d\_VPotentialPrev, d\_VPotential, 
+      d\_EpsilonError, RRow, ZColumn, PhiSlice);
+1085 
+1086         cudaMemcpy( EpsilonError, d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyDeviceToHost );      
+1087         
+1088 
+1089         errorConv[cycle] = *EpsilonError  / (RRow * ZColumn * PhiSlice);
+1090 
+1091         \textcolor{keywordflow}{if} (errorConv[cycle] < convErr)
+1092         \{
+1093             \textcolor{comment}{//errorConv}
+1094             nCycle = cycle;
+1095             \textcolor{keywordflow}{break};
+1096         \}
+1097 
+1098         cudaMemcpy( d\_VPotentialPrev, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToDevice );
+1099         cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1100 
+1101     \}
+1102     iparam[3] = nCycle;
+1103 
+1104 \textcolor{comment}{//  for (int cycle = 0; cycle < nCycle; cycle++)}
+1105 \textcolor{comment}{//  \{}
+1106 \textcolor{comment}{//      cudaMemcpy( temp\_VPotentialPrev, d\_VPotential, RRow * ZColumn * PhiSlice * sizeof(float),
+       cudaMemcpyDeviceToHost );}
+1107 
+1108     
+1109 \textcolor{comment}{//      VCycleSemiCoarseningGPU(d\_VPotential, d\_RhoChargeDensity, d\_DeltaResidue, d\_coef1, d\_coef2,
+       d\_coef3, d\_coef4, d\_icoef4, gridSizeR, ratioZ, ratioPhi, RRow, ZColumn, PhiSlice, gridFrom, gridTo, nPre, nPost);}
+1110         
+1111 \textcolor{comment}{//      cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * sizeof(float),
+       cudaMemcpyDeviceToHost );}
+1112 \textcolor{comment}{//      errorConv[cycle] = GetErrorNorm2(temp\_VPotential, temp\_VPotentialPrev, RRow * PhiSlice, ZColumn,
+       1.0); }
+1113 \textcolor{comment}{//      //errorExact[cycle] = GetErrorNorm2(temp\_VPotential, VPotentialExact, RRow * PhiSlice,ZColumn,
+       1.0); }
+1114 \textcolor{comment}{//  \}}
+1115 
+1116 
+1117     \textcolor{comment}{// copy result from device to host}
+1118     cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+1119 
+1120     memcpy(VPotential, temp\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1121 
+1122     \textcolor{comment}{// free device memory}
+1123     cudaFree( d\_VPotential );
+1124     cudaFree( d\_DeltaResidue );
+1125     cudaFree( d\_RhoChargeDensity );
+1126     cudaFree( d\_VPotentialPrev );
+1127     cudaFree( d\_EpsilonError );
+1128     cudaFree( d\_coef1 );
+1129     cudaFree( d\_coef2 );
+1130     cudaFree( d\_coef3 );
+1131     cudaFree( d\_coef4 );
+1132     cudaFree( d\_icoef4 );
+1133 
+1134     \textcolor{comment}{// free host memory}
+1135     free( coef1 );
+1136     free( coef2 );
+1137     free( coef3 );
+1138     free( coef4 );
+1139     free( icoef4 );
+1140     free( temp\_VPotential );
+1141     free( VPotentialPrev );
+1142 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a2a1da5844b8c399a35f446977c7ac550}{}\label{PoissonSolver3DGPU_8cu_a2a1da5844b8c399a35f446977c7ac550} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle}}
+\index{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle()}{PoissonMultigrid3DSemiCoarseningGPUErrorFCycle()}}
+{\footnotesize\ttfamily void Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+F\+Cycle (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{const int}]{Symmetry,  }\item[{float $\ast$}]{fparam,  }\item[{int $\ast$}]{iparam,  }\item[{bool}]{is\+Exact\+Present,  }\item[{float $\ast$}]{error\+Conv,  }\item[{float $\ast$}]{error\+Exact,  }\item[{float $\ast$}]{V\+Potential\+Exact }\end{DoxyParamCaption})}
+
+cuda\+Memcpy( temp\+\_\+\+V\+Potential, d\+\_\+\+Rho\+Charge\+Density + grid\+\_\+\+Start\+Pos , grid\+\_\+\+R\+Row $\ast$ grid\+\_\+\+Z\+Column $\ast$ Phi\+Slice $\ast$ sizeof(float), cuda\+Memcpy\+Device\+To\+Host ); 
+
+Definisi pada baris 1837 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+1851 \{
+1852     \textcolor{comment}{// variables for CPU memory}
+1853     \textcolor{keywordtype}{float} *temp\_VPotential;
+1854     \textcolor{keywordtype}{float} *VPotentialPrev;
+1855     \textcolor{keywordtype}{float} *EpsilonError;        
+1856 
+1857     \textcolor{comment}{// variables for GPU memory }
+1858     \textcolor{keywordtype}{float} *d\_VPotential;
+1859     \textcolor{keywordtype}{float} *d\_RhoChargeDensity;
+1860     \textcolor{keywordtype}{float} *d\_DeltaResidue;
+1861     \textcolor{keywordtype}{float} *d\_coef1;
+1862     \textcolor{keywordtype}{float} *d\_coef2;
+1863     \textcolor{keywordtype}{float} *d\_coef3;
+1864     \textcolor{keywordtype}{float} *d\_coef4;
+1865     \textcolor{keywordtype}{float} *d\_icoef4;
+1866     \textcolor{keywordtype}{float} *d\_VPotentialPrev;
+1867     \textcolor{keywordtype}{float} *d\_EpsilonError;
+1868     
+1869 
+1870     \textcolor{comment}{// variables for coefficent calculations}
+1871     \textcolor{keywordtype}{float} *coef1;
+1872     \textcolor{keywordtype}{float} *coef2;
+1873     \textcolor{keywordtype}{float} *coef3;
+1874     \textcolor{keywordtype}{float} *coef4;
+1875     \textcolor{keywordtype}{float} *icoef4;
+1876     \textcolor{keywordtype}{float} tempRatioZ;
+1877     \textcolor{keywordtype}{float} tempRatioPhi;
+1878     \textcolor{keywordtype}{float} radius;
+1879 
+1880     \textcolor{keywordtype}{int} gridFrom;
+1881     \textcolor{keywordtype}{int} gridTo; 
+1882     \textcolor{keywordtype}{int} loops;
+1883 
+1884     \textcolor{comment}{// variables passed from ALIROOT}
+1885     \textcolor{keywordtype}{float} gridSizeR     = fparam[0];
+1886     \textcolor{comment}{//float gridSizePhi = fparam[1];}
+1887     \textcolor{comment}{//float gridSizeZ       = fparam[2];}
+1888     \textcolor{keywordtype}{float} ratioPhi      = fparam[3];
+1889     \textcolor{keywordtype}{float} ratioZ        = fparam[4];
+1890     \textcolor{keywordtype}{float} convErr       = fparam[5];
+1891     \textcolor{keywordtype}{float} IFCRadius     = fparam[6];
+1892     \textcolor{keywordtype}{int} nPre    = iparam[0];
+1893     \textcolor{keywordtype}{int} nPost   = iparam[1];
+1894     \textcolor{keywordtype}{int} maxLoop = iparam[2];
+1895     \textcolor{keywordtype}{int} nCycle  = iparam[3];
+1896 
+1897     \textcolor{comment}{// variables for calculating GPU memory allocation}
+1898     \textcolor{keywordtype}{int} grid\_RRow;
+1899     \textcolor{keywordtype}{int} grid\_ZColumn;
+1900     \textcolor{keywordtype}{int} grid\_PhiSlice = PhiSlice;
+1901     \textcolor{keywordtype}{int} grid\_Size = 0;
+1902     \textcolor{keywordtype}{int} grid\_StartPos;
+1903     \textcolor{keywordtype}{int} coef\_Size = 0;
+1904     \textcolor{keywordtype}{int} coef\_StartPos;
+1905     \textcolor{keywordtype}{int} iOne, jOne;
+1906     \textcolor{keywordtype}{float} h, h2, ih2;
+1907 
+1908     \textcolor{comment}{// variables for calculating multigrid maximum depth}
+1909     \textcolor{keywordtype}{int} depth\_RRow = 0;
+1910     \textcolor{keywordtype}{int} depth\_ZColumn = 0;
+1911     \textcolor{keywordtype}{int} temp\_RRow = RRow;
+1912     \textcolor{keywordtype}{int} temp\_ZColumn = ZColumn;
+1913 
+1914     \textcolor{comment}{// calculate depth for multigrid}
+1915     \textcolor{keywordflow}{while} (temp\_RRow >>= 1) depth\_RRow++;  
+1916     \textcolor{keywordflow}{while} (temp\_ZColumn >>= 1) depth\_ZColumn++;
+1917   
+1918     loops = (depth\_RRow > depth\_ZColumn) ? depth\_ZColumn : depth\_RRow;
+1919     loops = (loops > maxLoop) ? maxLoop : loops;
+1920 
+1921     gridFrom = 1;
+1922     gridTo = loops;
+1923 
+1924     \textcolor{comment}{// calculate GPU memory allocation for multigrid}
+1925     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+1926     \{
+1927         grid\_RRow = ((RRow - 1) / (1 << (step - 1))) + 1;
+1928         grid\_ZColumn = ((ZColumn - 1) / (1 << (step - 1))) + 1;
+1929         
+1930         grid\_Size += grid\_RRow * grid\_ZColumn * grid\_PhiSlice;
+1931         coef\_Size += grid\_RRow;
+1932     \}
+1933 
+1934     \textcolor{comment}{// allocate memory for temporary output}
+1935     temp\_VPotential         = (\textcolor{keywordtype}{float} *) malloc(grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1936     VPotentialPrev = (\textcolor{keywordtype}{float} *) malloc(grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1937     EpsilonError = (\textcolor{keywordtype}{float} *) malloc(1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1938 
+1939     
+1940 
+1941     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<grid\_Size;i++) temp\_VPotential[i] = 0.0;
+1942 
+1943 
+1944     \textcolor{comment}{// allocate memory for relaxation coefficient}
+1945     coef1 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1946     coef2 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1947     coef3 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1948     coef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1949     icoef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1950 
+1951     \textcolor{comment}{// pre-compute relaxation coefficient}
+1952     \textcolor{comment}{// restrict boundary}
+1953     coef\_StartPos = 0;
+1954     grid\_StartPos = 0;
+1955 
+1956     iOne = 1 << (gridFrom - 1); 
+1957     jOne = 1 << (gridFrom - 1);
+1958     
+1959     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+1960     \{
+1961         grid\_RRow = ((RRow - 1) / iOne) + 1;
+1962         grid\_ZColumn = ((ZColumn - 1) / iOne) + 1;
+1963 
+1964         h = gridSizeR * iOne;
+1965         h2 = h * h;
+1966         ih2 = 1.0 / h2;
+1967 
+1968         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1969         tempRatioPhi = ratioPhi * iOne * iOne;
+1970 
+1971         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < grid\_RRow - 1; i++)
+1972         \{
+1973             radius = IFCRadius + i * h;
+1974             coef1[coef\_StartPos + i] = 1.0 + h / (2 * radius);
+1975             coef2[coef\_StartPos + i] = 1.0 - h / (2 * radius);
+1976             coef3[coef\_StartPos + i] = tempRatioPhi / (radius * radius);
+1977             coef4[coef\_StartPos + i] = 0.5 / (1.0 + tempRatioZ + coef3[coef\_StartPos + i]);
+1978             icoef4[coef\_StartPos + i] = 1.0 / coef4[coef\_StartPos + i];
+1979         \}
+1980 
+1981         \textcolor{comment}{// call restrict boundary}
+1982         \textcolor{keywordflow}{if} (step == gridFrom) \{
+1983             \textcolor{comment}{// Copy original VPotential to tempPotential}
+1984             memcpy(temp\_VPotential,     VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1985                     
+1986         \} 
+1987         \textcolor{comment}{// else }
+1988         \textcolor{comment}{//\{}
+1989         \textcolor{comment}{//  Restrict\_Boundary(temp\_VPotential, grid\_RRow, grid\_ZColumn, PhiSlice, grid\_StartPos);}
+1990         \textcolor{comment}{//\}}
+1991 
+1992         
+1993         coef\_StartPos += grid\_RRow;
+1994         grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+1995 
+1996 
+1997         iOne = 2 * iOne;
+1998         jOne = 2 * jOne;
+1999     \}
+2000 
+2001     \textcolor{comment}{// device memory allocation}
+2002     cudaMalloc( &d\_VPotential, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2003     cudaMalloc( &d\_DeltaResidue, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2004     cudaMalloc( &d\_RhoChargeDensity, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2005     cudaMalloc( &d\_coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2006     cudaMalloc( &d\_coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2007     cudaMalloc( &d\_coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2008     cudaMalloc( &d\_coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2009     cudaMalloc( &d\_icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2010     cudaMalloc( &d\_VPotentialPrev, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2011     cudaMalloc( &d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );   
+2012         
+2013 
+2014     \textcolor{comment}{// set memory to zero}
+2015     cudaMemset( d\_VPotential, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2016     cudaMemset( d\_DeltaResidue, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2017     cudaMemset( d\_RhoChargeDensity, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2018     cudaMemset( d\_VPotentialPrev, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2019     cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2020 
+2021     \textcolor{comment}{// set memory to zero}
+2022     cudaMemset( d\_VPotential, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2023     cudaMemset( d\_DeltaResidue, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2024     cudaMemset( d\_RhoChargeDensity, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2025 
+2026     \textcolor{comment}{// copy data from host to devicei}
+2027     \textcolor{comment}{// case of FCycle you need to copy all boundary for all}
+2028     cudaMemcpy( d\_VPotential, temp\_VPotential, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice ); \textcolor{comment}{//check}
+2029 \textcolor{comment}{//  cudaMemcpy( d\_VPotential, VPotential, grid\_Size * isizeof(float), cudaMemcpyHostToDevice ); //check}
+2030 
+2031     cudaMemcpy( d\_RhoChargeDensity, RhoChargeDensity, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyHostToDevice ); \textcolor{comment}{//check}
+2032 \textcolor{comment}{//  cudaMemcpy( d\_RhoChargeDensity, temp\_VPotentialPrev, grid\_Size * sizeof(float), cudaMemcpyHostToDevice
+       ); //check}
+2033     cudaMemcpy( d\_coef1, coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+2034     cudaMemcpy( d\_coef2, coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+2035     cudaMemcpy( d\_coef3, coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+2036     cudaMemcpy( d\_coef4, coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+2037     cudaMemcpy( d\_icoef4, icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+2038 \textcolor{comment}{//  cudaMemcpy( d\_VPotentialPrev, temp\_VPotential, grid\_Size * sizeof(float), cudaMemcpyHostToDevice );}
+2039 
+2040 \textcolor{comment}{//  cudaMemcpy( d\_VPotentialPrev, VPotential, RRow * ZColumn * PhiSlice * sizeof(float),
+       cudaMemcpyHostToDevice );}
+2041     
+2042     \textcolor{comment}{// max exact}
+2043     
+2044     \textcolor{keywordtype}{float} maxAbsExact = 1.0;
+2045 
+2046     \textcolor{keywordflow}{if} (isExactPresent == \textcolor{keyword}{true})
+2047         maxAbsExact = GetAbsMax(VPotentialExact, RRow * PhiSlice * ZColumn);
+2048     
+2049     
+2050 
+2051     \textcolor{comment}{// init iOne,grid\_RRow, grid\_ZColumn, grid\_StartPos, coef\_StartPos}
+2052     iOne = 1 << (gridFrom - 1); 
+2053     jOne = 1 << (gridFrom - 1);
+2054 
+2055     grid\_RRow       = ((RRow - 1) / iOne) + 1;
+2056     grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+2057 
+2058     grid\_StartPos = 0;
+2059     coef\_StartPos = 0;
+2060 
+2061 
+2063     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom + 1; step <= gridTo; step++)
+2064     \{
+2065 
+2066         iOne = 1 << (step - 1); 
+2067         jOne = 1 << (step - 1);
+2068 
+2069         grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+2070         coef\_StartPos += grid\_RRow;
+2071 
+2072         grid\_RRow       = ((RRow - 1) / iOne) + 1;
+2073         grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+2074 
+2075         \textcolor{comment}{// pre-compute constant memory}
+2076         h   = gridSizeR * iOne;
+2077         h2  = h * h;
+2078         ih2 = 1.0 / h2;
+2079 
+2080         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+2081         tempRatioPhi = ratioPhi * iOne * iOne;
+2082 
+2083         \textcolor{comment}{// copy constant to device memory}
+2084         cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+2085         cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+2086         cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2087         cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2088         cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2089 
+2090         \textcolor{comment}{// set kernel grid size and block size}
+2091         dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+2092         dim3 grid\_ThreadPerBlock(16, 16);
+2093 
+2094         \textcolor{comment}{// restriction}
+2095         restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_RhoChargeDensity, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+2096         
+2097         \textcolor{comment}{// restrict boundary (already done in cpu)}
+2099 \textcolor{comment}{}\textcolor{comment}{//      PrintMatrix(temp\_VPotential,grid\_RRow * PhiSlice,grid\_ZColumn);}
+2100         restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, d\_VPotential, 
+      grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+2101 
+2102         
+2103     \}
+2104 
+2105     dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (grid\_ZColumn
+       / 16), PhiSlice);
+2106     dim3 grid\_ThreadPerBlock(16, 16);
+2107 
+2108 
+2109     \textcolor{comment}{// relax on the coarsest }
+2110     \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+2111 \textcolor{comment}{//  printf("rho\(\backslash\)n");}
+2112 \textcolor{comment}{//  cudaMemcpy( temp\_VPotential, d\_RhoChargeDensity + grid\_StartPos , grid\_RRow * grid\_ZColumn * PhiSlice *
+       sizeof(float), cudaMemcpyDeviceToHost );}
+2113 \textcolor{comment}{//  PrintMatrix(temp\_VPotential,grid\_RRow,grid\_ZColumn);}
+2114     
+2115 \textcolor{comment}{//  printf("v\(\backslash\)n");}
+2116 \textcolor{comment}{//  cudaMemcpy( temp\_VPotential, d\_VPotential + grid\_StartPos , grid\_RRow * grid\_ZColumn * PhiSlice *
+       sizeof(float), cudaMemcpyDeviceToHost );}
+2117 \textcolor{comment}{//  PrintMatrix(temp\_VPotential,grid\_RRow,grid\_ZColumn);}
+2118     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+2119     \{
+2120         relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+2121         cudaDeviceSynchronize();
+2122         relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+2123         cudaDeviceSynchronize();
+2124     \}
+2125 
+2126 \textcolor{comment}{//  printf("v after relax\(\backslash\)n");}
+2127 \textcolor{comment}{//  cudaMemcpy( temp\_VPotential, d\_VPotential + grid\_StartPos , grid\_RRow * grid\_ZColumn * PhiSlice *
+       sizeof(float), cudaMemcpyDeviceToHost );}
+2128 \textcolor{comment}{//  PrintMatrix(temp\_VPotential,grid\_RRow,grid\_ZColumn);}
+2129     
+2130     \textcolor{comment}{// V-Cycle => from coarser to finer grid}
+2131     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridTo -1 ; step >= gridFrom; step--)
+2132     \{
+2133         iOne = iOne / 2;
+2134         jOne = jOne / 2;
+2135     
+2136         grid\_RRow       = ((RRow - 1) / iOne) + 1;
+2137         grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+2138 
+2139         grid\_StartPos -= grid\_RRow * grid\_ZColumn * PhiSlice;
+2140         coef\_StartPos -= grid\_RRow;
+2141     
+2142         h   = gridSizeR * iOne;
+2143         h2  = h * h;
+2144         ih2 = 1.0 / h2;
+2145     
+2146         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+2147         tempRatioPhi = ratioPhi * iOne * iOne;
+2148 
+2149         \textcolor{comment}{// copy constant to device memory}
+2150         cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+2151         cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+2152         cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2153         cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2154         cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+2155 
+2156         
+2157 
+2158         \textcolor{comment}{// set kernel grid size and block size}
+2159         dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+2160         dim3 grid\_ThreadPerBlock(16, 16);
+2161 
+2162 
+2163         prolongation2DHalfNoAdd<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+2164 
+2165 
+2166         
+2167 
+2168         \textcolor{comment}{// just }
+2169         
+2170         \textcolor{comment}{// max exact}
+2171         cudaMemcpy( d\_VPotentialPrev + grid\_StartPos, d\_VPotential + grid\_StartPos, grid\_RRow * 
+      grid\_ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyDeviceToDevice );
+2172                 
+2173         \textcolor{keywordtype}{float} maxAbsExact = 1.0;
+2174 
+2175         \textcolor{keywordflow}{if} (isExactPresent == \textcolor{keyword}{true})
+2176             maxAbsExact = GetAbsMax(VPotentialExact, RRow * PhiSlice * ZColumn);
+2177         dim3 error\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+2178         dim3 error\_ThreadPerBlock(16, 16);      
+2179 
+2180         
+2181 
+2182         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} cycle = 0; cycle < nCycle; cycle++)
+2183         \{
+2184 
+2185                 
+2186             \textcolor{keywordflow}{if} (step == gridFrom) \{
+2187                 cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+2188                 \textcolor{keywordflow}{if} (isExactPresent == \textcolor{keyword}{true} )errorExact[cycle] = GetErrorNorm2(temp\_VPotential, 
+      VPotentialExact, RRow * PhiSlice,ZColumn, maxAbsExact); 
+2189             \}
+2190 
+2191 
+2192 
+2193             \textcolor{comment}{//cudaDeviceSynchronize();}
+2194             VCycleSemiCoarseningGPU(d\_VPotential, d\_RhoChargeDensity, d\_DeltaResidue, d\_coef1, d\_coef2, 
+      d\_coef3, d\_coef4, d\_icoef4, gridSizeR, ratioZ, ratioPhi, RRow, ZColumn, PhiSlice, step, gridTo, nPre, nPost);
+2195             
+2196 
+2197 
+2198                 \textcolor{comment}{//if (step == gridFrom) \{}
+2199                 \textcolor{comment}{//cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * sizeof(float),
+       cudaMemcpyDeviceToHost );}
+2200     
+2201                 \textcolor{comment}{//errorConv[cycle] = GetErrorNorm2(temp\_VPotential, VPotentialPrev, RRow *
+       PhiSlice,ZColumn, 1.0); }
+2202 
+2203                 errorCalculation<<< error\_BlockPerGrid, error\_ThreadPerBlock >>> ( d\_VPotentialPrev + 
+      grid\_StartPos, d\_VPotential + grid\_StartPos, d\_EpsilonError, grid\_RRow, grid\_ZColumn, PhiSlice);
+2204 
+2205                 cudaMemcpy( EpsilonError, d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyDeviceToHost );      
+2206                 
+2207                 errorConv[cycle] = *EpsilonError  / (grid\_RRow * grid\_ZColumn * PhiSlice);
+2208 
+2209                 \textcolor{keywordflow}{if} (errorConv[cycle]< convErr)
+2210                 \{
+2211                     nCycle = cycle;         
+2212                     \textcolor{keywordflow}{break};
+2213                 \}
+2214 
+2215                 cudaMemcpy( d\_VPotentialPrev + grid\_StartPos, d\_VPotential + grid\_StartPos, grid\_RRow * 
+      grid\_ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyDeviceToDevice );
+2216                 cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+2217                 
+2218         \}
+2219         
+2220         
+2221     \}
+2222 
+2223     iparam[3] = nCycle; 
+2224 
+2225     \textcolor{comment}{// copy result from device to host}
+2226     cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+2227 
+2228     memcpy(VPotential, temp\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+2229 
+2230     \textcolor{comment}{// free device memory}
+2231     cudaFree( d\_VPotential );
+2232     cudaFree( d\_DeltaResidue );
+2233     cudaFree( d\_RhoChargeDensity );
+2234     cudaFree( d\_coef1 );
+2235     cudaFree( d\_coef2 );
+2236     cudaFree( d\_coef3 );
+2237     cudaFree( d\_coef4 );
+2238     cudaFree( d\_icoef4 );
+2239 
+2240     \textcolor{comment}{// free host memory}
+2241     free( coef1 );
+2242     free( coef2 );
+2243     free( coef3 );
+2244     free( coef4 );
+2245     free( icoef4 );
+2246     free( temp\_VPotential );
+2247     free( VPotentialPrev );
+2248 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a29ff8c657a945ecbeeb7b219169d09c6}{}\label{PoissonSolver3DGPU_8cu_a29ff8c657a945ecbeeb7b219169d09c6} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle}}
+\index{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle@{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle()}{PoissonMultigrid3DSemiCoarseningGPUErrorWCycle()}}
+{\footnotesize\ttfamily void Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error\+W\+Cycle (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{const int}]{Symmetry,  }\item[{float $\ast$}]{fparam,  }\item[{int $\ast$}]{iparam,  }\item[{float $\ast$}]{error\+Conv,  }\item[{float $\ast$}]{error\+Exact,  }\item[{float $\ast$}]{V\+Potential\+Exact }\end{DoxyParamCaption})}
+
+innner w cycle up one down one
+
+end up one down on
+
+up two down two
+
+up one down one
+
+end up one down one 
+
+Definisi pada baris 1147 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+1160 \{
+1161     \textcolor{comment}{// variables for CPU memory}
+1162     \textcolor{keywordtype}{float} *temp\_VPotential;
+1163     \textcolor{keywordtype}{float} *VPotentialPrev;
+1164     \textcolor{keywordtype}{float} *EpsilonError;        
+1165 
+1166     \textcolor{comment}{// variables for GPU memory }
+1167     \textcolor{keywordtype}{float} *d\_VPotential;
+1168     \textcolor{keywordtype}{float} *d\_RhoChargeDensity;
+1169     \textcolor{keywordtype}{float} *d\_DeltaResidue;
+1170     \textcolor{keywordtype}{float} *d\_coef1;
+1171     \textcolor{keywordtype}{float} *d\_coef2;
+1172     \textcolor{keywordtype}{float} *d\_coef3;
+1173     \textcolor{keywordtype}{float} *d\_coef4;
+1174     \textcolor{keywordtype}{float} *d\_icoef4;
+1175     \textcolor{keywordtype}{float} *d\_VPotentialPrev;
+1176     \textcolor{keywordtype}{float} *d\_EpsilonError;
+1177     
+1178 
+1179     \textcolor{comment}{// variables for coefficent calculations}
+1180     \textcolor{keywordtype}{float} *coef1;
+1181     \textcolor{keywordtype}{float} *coef2;
+1182     \textcolor{keywordtype}{float} *coef3;
+1183     \textcolor{keywordtype}{float} *coef4;
+1184     \textcolor{keywordtype}{float} *icoef4;
+1185     \textcolor{keywordtype}{float} tempRatioZ;
+1186     \textcolor{keywordtype}{float} tempRatioPhi;
+1187     \textcolor{keywordtype}{float} radius;
+1188 
+1189     \textcolor{keywordtype}{int} gridFrom;
+1190     \textcolor{keywordtype}{int} gridTo; 
+1191     \textcolor{keywordtype}{int} loops;
+1192 
+1193     \textcolor{comment}{// variables passed from ALIROOT}
+1194     \textcolor{keywordtype}{float} gridSizeR     = fparam[0];
+1195     \textcolor{comment}{//float gridSizePhi = fparam[1];}
+1196     \textcolor{comment}{//float gridSizeZ       = fparam[2];}
+1197     \textcolor{keywordtype}{float} ratioPhi      = fparam[3];
+1198     \textcolor{keywordtype}{float} ratioZ        = fparam[4];
+1199     \textcolor{keywordtype}{float} convErr       = fparam[5];
+1200     \textcolor{keywordtype}{float} IFCRadius     = fparam[6];
+1201     \textcolor{keywordtype}{int} nPre    = iparam[0];
+1202     \textcolor{keywordtype}{int} nPost   = iparam[1];
+1203     \textcolor{keywordtype}{int} maxLoop = iparam[2];
+1204     \textcolor{keywordtype}{int} nCycle  = iparam[3];
+1205 
+1206     \textcolor{comment}{// variables for calculating GPU memory allocation}
+1207     \textcolor{keywordtype}{int} grid\_RRow;
+1208     \textcolor{keywordtype}{int} grid\_ZColumn;
+1209     \textcolor{keywordtype}{int} grid\_PhiSlice = PhiSlice;
+1210     \textcolor{keywordtype}{int} grid\_Size = 0;
+1211     \textcolor{keywordtype}{int} grid\_StartPos;
+1212     \textcolor{keywordtype}{int} coef\_Size = 0;
+1213     \textcolor{keywordtype}{int} coef\_StartPos;
+1214     \textcolor{keywordtype}{int} iOne, jOne;
+1215     \textcolor{keywordtype}{float} h, h2, ih2;
+1216 
+1217     \textcolor{comment}{// variables for calculating multigrid maximum depth}
+1218     \textcolor{keywordtype}{int} depth\_RRow = 0;
+1219     \textcolor{keywordtype}{int} depth\_ZColumn = 0;
+1220     \textcolor{keywordtype}{int} temp\_RRow = RRow;
+1221     \textcolor{keywordtype}{int} temp\_ZColumn = ZColumn;
+1222 
+1223     \textcolor{comment}{// calculate depth for multigrid}
+1224     \textcolor{keywordflow}{while} (temp\_RRow >>= 1) depth\_RRow++;  
+1225     \textcolor{keywordflow}{while} (temp\_ZColumn >>= 1) depth\_ZColumn++;
+1226   
+1227     loops = (depth\_RRow > depth\_ZColumn) ? depth\_ZColumn : depth\_RRow;
+1228     loops = (loops > maxLoop) ? maxLoop : loops;
+1229 
+1230     gridFrom = 1;
+1231     gridTo = loops;
+1232 
+1233     \textcolor{comment}{// calculate GPU memory allocation for multigrid}
+1234     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+1235     \{
+1236         grid\_RRow = ((RRow - 1) / (1 << (step - 1))) + 1;
+1237         grid\_ZColumn = ((ZColumn - 1) / (1 << (step - 1))) + 1;
+1238         
+1239         grid\_Size += grid\_RRow * grid\_ZColumn * grid\_PhiSlice;
+1240         coef\_Size += grid\_RRow;
+1241     \}
+1242 
+1243     \textcolor{comment}{// allocate memory for temporary output}
+1244     temp\_VPotential         = (\textcolor{keywordtype}{float} *) malloc(grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1245     VPotentialPrev = (\textcolor{keywordtype}{float} *) malloc(RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1246     EpsilonError = (\textcolor{keywordtype}{float} *) malloc(1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1247 
+1248 
+1249     \textcolor{comment}{// allocate memory for relaxation coefficient}
+1250     coef1 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1251     coef2 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1252     coef3 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1253     coef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1254     icoef4 = (\textcolor{keywordtype}{float} *) malloc(coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1255 
+1256     \textcolor{comment}{// pre-compute relaxation coefficient}
+1257     coef\_StartPos = 0;
+1258     iOne = 1 << (gridFrom - 1); 
+1259     jOne = 1 << (gridFrom - 1);
+1260     
+1261     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom; step <= gridTo; step++)
+1262     \{
+1263         grid\_RRow = ((RRow - 1) / iOne) + 1;
+1264 
+1265         h = gridSizeR * iOne;
+1266         h2 = h * h;
+1267         ih2 = 1.0 / h2;
+1268 
+1269         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1270         tempRatioPhi = ratioPhi * iOne * iOne;
+1271 
+1272         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < grid\_RRow - 1; i++)
+1273         \{
+1274             radius = IFCRadius + i * h;
+1275             coef1[coef\_StartPos + i] = 1.0 + h / (2 * radius);
+1276             coef2[coef\_StartPos + i] = 1.0 - h / (2 * radius);
+1277             coef3[coef\_StartPos + i] = tempRatioPhi / (radius * radius);
+1278             coef4[coef\_StartPos + i] = 0.5 / (1.0 + tempRatioZ + coef3[coef\_StartPos + i]);
+1279             icoef4[coef\_StartPos + i] = 1.0 / coef4[coef\_StartPos + i];
+1280         \}
+1281         coef\_StartPos += grid\_RRow;
+1282         iOne = 2 * iOne;
+1283         jOne = 2 * jOne;
+1284     \}
+1285 
+1286     \textcolor{comment}{// device memory allocation}
+1287     cudaMalloc( &d\_VPotential, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1288     cudaMalloc( &d\_DeltaResidue, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1289     cudaMalloc( &d\_VPotentialPrev, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1290     cudaMalloc( &d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );   
+1291         
+1292     cudaMalloc( &d\_RhoChargeDensity, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1293     cudaMalloc( &d\_coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1294     cudaMalloc( &d\_coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1295     cudaMalloc( &d\_coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1296     cudaMalloc( &d\_coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1297     cudaMalloc( &d\_icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1298 
+1299     \textcolor{comment}{// set memory to zero}
+1300     cudaMemset( d\_VPotential, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1301     cudaMemset( d\_DeltaResidue, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1302     cudaMemset( d\_RhoChargeDensity, 0, grid\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1303     cudaMemset( d\_VPotentialPrev, 0, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1304     cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1305 
+1306 
+1307     \textcolor{comment}{// copy data from host to device}
+1308     cudaMemcpy( d\_VPotential, VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice
+       ); \textcolor{comment}{//check}
+1309     cudaMemcpy( d\_RhoChargeDensity, RhoChargeDensity, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyHostToDevice ); \textcolor{comment}{//check}
+1310     cudaMemcpy( d\_coef1, coef1, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1311     cudaMemcpy( d\_coef2, coef2, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1312     cudaMemcpy( d\_coef3, coef3, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1313     cudaMemcpy( d\_coef4, coef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1314     cudaMemcpy( d\_icoef4, icoef4, coef\_Size * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyHostToDevice );
+1315     cudaMemcpy( d\_VPotentialPrev, VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyHostToDevice );
+1316     
+1317     \textcolor{comment}{// max exact    float maxAbsExact = GetAbsMax(VPotentialExact,RRow * PhiSlice * ZColumn);}
+1318     \textcolor{keywordtype}{float} maxAbsExact = GetAbsMax(VPotentialExact, RRow * PhiSlice * ZColumn);
+1319     dim3 error\_BlockPerGrid((RRow < 16) ? 1 : (RRow / 16), (ZColumn < 16) ? 1 : (ZColumn / 16), PhiSlice);
+1320     dim3 error\_ThreadPerBlock(16, 16);      
+1321 
+1322 
+1323     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} cycle = 0; cycle < nCycle; cycle++)
+1324     \{
+1325     \textcolor{comment}{/*V-Cycle starts*/}
+1326 
+1327         \textcolor{comment}{// error conv       }
+1328         \textcolor{comment}{//  cudaMemcpy( temp\_VPotentialPrev, d\_VPotential, RRow * ZColumn * PhiSlice * sizeof(float),
+       cudaMemcpyDeviceToHost );}
+1329         
+1330         cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+1331         errorExact[cycle] = GetErrorNorm2(temp\_VPotential,VPotentialExact,RRow * PhiSlice,ZColumn,
+      maxAbsExact); 
+1332 
+1333 
+1334         \textcolor{comment}{// V-Cycle => Finest Grid}
+1335         iOne = 1 << (gridFrom - 1); 
+1336         jOne = 1 << (gridFrom - 1);
+1337 
+1338         grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1339         grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1340 
+1341         grid\_StartPos = 0;
+1342         coef\_StartPos = 0;
+1343 
+1344         \textcolor{comment}{// pre-compute constant memory}
+1345         h   = gridSizeR * iOne;
+1346         h2  = h * h;
+1347         ih2 = 1.0 / h2;
+1348 
+1349         tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1350         tempRatioPhi = ratioPhi * iOne * iOne;
+1351 
+1352         \textcolor{comment}{// copy constant to device memory}
+1353         cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+1354         cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice );
+1355         cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1356         cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1357         cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1358 
+1359         \textcolor{comment}{// set kernel grid size and block size}
+1360         dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1361         dim3 grid\_ThreadPerBlock(16, 16);
+1362 
+1363         \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+1364         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+1365         \{
+1366             relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1367             \textcolor{comment}{//cudaDeviceSynchronize();}
+1368             relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1369             \textcolor{comment}{//cudaDeviceSynchronize();}
+1370         \}
+1371 
+1372         \textcolor{comment}{// residue calculation}
+1373         residueCalculation<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, d\_RhoChargeDensity,
+       d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_icoef4 );
+1374         \textcolor{comment}{//cudaDeviceSynchronize();}
+1375 
+1376         \textcolor{comment}{// V-Cycle => from finer to coarsest grid}
+1377         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridFrom + 1; step <= gridTo; step++)
+1378         \{
+1379             iOne = 1 << (step - 1); 
+1380             jOne = 1 << (step - 1);
+1381 
+1382             grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+1383             coef\_StartPos += grid\_RRow;
+1384 
+1385             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1386             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1387 
+1388             \textcolor{comment}{// pre-compute constant memory}
+1389             h   = gridSizeR * iOne;
+1390             h2  = h * h;
+1391             ih2 = 1.0 / h2;
+1392 
+1393             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1394             tempRatioPhi = ratioPhi * iOne * iOne;
+1395 
+1396             \textcolor{comment}{// copy constant to device memory}
+1397             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1398             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1399             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1400             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1401             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1402 
+1403             \textcolor{comment}{// set kernel grid size and block size}
+1404             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1405             dim3 grid\_ThreadPerBlock(16, 16);
+1406 
+1407             \textcolor{comment}{// restriction}
+1408             restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_RhoChargeDensity, 
+      d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+1409             \textcolor{comment}{//cudaDeviceSynchronize();}
+1410 
+1411             \textcolor{comment}{// zeroing V}
+1412             zeroingVPotential<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1413             \textcolor{comment}{//cudaDeviceSynchronize();}
+1414 
+1415             \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+1416             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+1417             \{
+1418                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1419                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1420                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1421                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1422             \}
+1423 
+1424             \textcolor{comment}{// residue calculation}
+1425             \textcolor{keywordflow}{if} (step < gridTo)
+1426             \{
+1427                 residueCalculation<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_icoef4 );
+1428                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1429 
+1430             \}
+1431         \}
+1434 
+1435         \textcolor{comment}{// up one}
+1436 
+1437 
+1438         \{
+1439             \textcolor{keywordtype}{int} step = (gridTo - 1);
+1440             iOne = iOne / 2;
+1441             jOne = jOne / 2;
+1442         
+1443             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1444             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1445 
+1446             grid\_StartPos -= grid\_RRow * grid\_ZColumn * PhiSlice;
+1447             coef\_StartPos -= grid\_RRow;
+1448         
+1449             h   = gridSizeR * iOne;
+1450             h2  = h * h;
+1451             ih2 = 1.0 / h2;
+1452         
+1453             tempRatioPhi = ratioPhi * iOne * iOne;
+1454     
+1455             \textcolor{comment}{// copy constant to device memory}
+1456             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1457             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1458             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1459             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1460             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1461 
+1462             \textcolor{comment}{// set kernel grid size and block size}
+1463             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1464             dim3 grid\_ThreadPerBlock(16, 16);
+1465     
+1466         \textcolor{comment}{// prolongation}
+1467             prolongation2DHalf<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1468 \textcolor{comment}{//          cudaDeviceSynchronize();}
+1469 
+1470             \textcolor{comment}{// red-black gauss seidel relaxation (nPost times)}
+1471             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPost; i++)
+1472             \{
+1473                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1474 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1475                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1476 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1477             \}
+1478         \}
+1479 
+1480         \textcolor{comment}{// down one}
+1481         \{
+1482             residueCalculation<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_icoef4 );
+1483                 
+1484             iOne = iOne * 2; 
+1485             jOne = jOne * 2;
+1486 
+1487             grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+1488             coef\_StartPos += grid\_RRow;
+1489 
+1490             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1491             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1492 
+1493             \textcolor{comment}{// pre-compute constant memory}
+1494             h   = gridSizeR * iOne;
+1495             h2  = h * h;
+1496             ih2 = 1.0 / h2;
+1497 
+1498             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1499             tempRatioPhi = ratioPhi * iOne * iOne;
+1500 
+1501 
+1502             \textcolor{comment}{// copy constant to device memory}
+1503             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1504             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1505             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1506             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1507             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1508 
+1509             \textcolor{comment}{// set kernel grid size and block size}
+1510             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1511             dim3 grid\_ThreadPerBlock(16, 16);
+1512 
+1513             \textcolor{comment}{// restriction}
+1514             restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_RhoChargeDensity, 
+      d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+1515             \textcolor{comment}{//cudaDeviceSynchronize();}
+1516 
+1517             \textcolor{comment}{// zeroing V}
+1518             zeroingVPotential<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1519             \textcolor{comment}{//cudaDeviceSynchronize();}
+1520 
+1521             \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+1522             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+1523             \{
+1524                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1525                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1526                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1527                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1528             \}
+1529             
+1530         \}
+1532         
+1534         \textcolor{comment}{// up two from gridTo - 1, to gridTo -3}
+1535         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = (gridTo - 1); step >= gridTo - 3; step--)
+1536         \{
+1537             iOne = iOne / 2;
+1538             jOne = jOne / 2;
+1539         
+1540             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1541             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1542 
+1543             grid\_StartPos -= grid\_RRow * grid\_ZColumn * PhiSlice;
+1544             coef\_StartPos -= grid\_RRow;
+1545         
+1546             h   = gridSizeR * iOne;
+1547             h2  = h * h;
+1548             ih2 = 1.0 / h2;
+1549         
+1550             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1551             tempRatioPhi = ratioPhi * iOne * iOne;
+1552 
+1553             \textcolor{comment}{// copy constant to device memory}
+1554             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1555             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1556             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1557             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1558             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1559 
+1560             \textcolor{comment}{// set kernel grid size and block size}
+1561             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1562             dim3 grid\_ThreadPerBlock(16, 16);
+1563     
+1564             \textcolor{comment}{// prolongation}
+1565             prolongation2DHalf<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1566 \textcolor{comment}{//          cudaDeviceSynchronize();}
+1567 
+1568             \textcolor{comment}{// red-black gauss seidel relaxation (nPost times)}
+1569             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPost; i++)
+1570             \{
+1571                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1572 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1573                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1574 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1575             \}
+1576         \}
+1577         
+1578         \textcolor{comment}{// down to from gridTo - 1, to gridTo -3}
+1579         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = gridTo - 3; step <= gridTo - 1; step++)
+1580         \{
+1581             iOne = iOne * 2; 
+1582             jOne = jOne * 2;
+1583 
+1584             grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+1585             coef\_StartPos += grid\_RRow;
+1586 
+1587             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1588             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1589 
+1590             \textcolor{comment}{// pre-compute constant memory}
+1591             h   = gridSizeR * iOne;
+1592             h2  = h * h;
+1593             ih2 = 1.0 / h2;
+1594 
+1595             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1596             tempRatioPhi = ratioPhi * iOne * iOne;
+1597 
+1598             \textcolor{comment}{// copy constant to device memory}
+1599             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1600             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1601             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1602             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1603             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1604 
+1605             \textcolor{comment}{// set kernel grid size and block size}
+1606             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1607             dim3 grid\_ThreadPerBlock(16, 16);
+1608 
+1609             \textcolor{comment}{// restriction}
+1610             restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_RhoChargeDensity, 
+      d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+1611             \textcolor{comment}{//cudaDeviceSynchronize();}
+1612 
+1613             \textcolor{comment}{// zeroing V}
+1614             zeroingVPotential<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1615             \textcolor{comment}{//cudaDeviceSynchronize();}
+1616 
+1617             \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+1618             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+1619             \{
+1620                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1621                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1622                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1623                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1624             \}
+1625 
+1626             \textcolor{comment}{// residue calculation}
+1627             \textcolor{keywordflow}{if} (step < gridTo)
+1628             \{
+1629                 residueCalculation<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_icoef4 );
+1630                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1631 
+1632             \}
+1633         \}
+1634 
+1635         
+1636 
+1638         \{
+1639             \textcolor{keywordtype}{int} step = (gridTo - 1);
+1640             iOne = iOne / 2;
+1641             jOne = jOne / 2;
+1642         
+1643             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1644             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1645 
+1646             grid\_StartPos -= grid\_RRow * grid\_ZColumn * PhiSlice;
+1647             coef\_StartPos -= grid\_RRow;
+1648         
+1649             h   = gridSizeR * iOne;
+1650             h2  = h * h;
+1651             ih2 = 1.0 / h2;
+1652         
+1653             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1654             tempRatioPhi = ratioPhi * iOne * iOne;
+1655     
+1656             \textcolor{comment}{// copy constant to device memory}
+1657             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1658             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1659             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1660             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1661             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1662 
+1663             \textcolor{comment}{// set kernel grid size and block size}
+1664             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1665             dim3 grid\_ThreadPerBlock(16, 16);
+1666     
+1667         \textcolor{comment}{// prolongation}
+1668             prolongation2DHalf<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1669 \textcolor{comment}{//          cudaDeviceSynchronize();}
+1670 
+1671             \textcolor{comment}{// red-black gauss seidel relaxation (nPost times)}
+1672             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPost; i++)
+1673             \{
+1674                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1675 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1676                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1677 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1678             \}
+1679         \}
+1680 
+1681         \textcolor{comment}{// down one}
+1682         \{
+1683             residueCalculation<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_icoef4 );
+1684                 
+1685             iOne = iOne * 2; 
+1686             jOne = jOne * 2;
+1687 
+1688             grid\_StartPos += grid\_RRow * grid\_ZColumn * PhiSlice;
+1689             coef\_StartPos += grid\_RRow;
+1690 
+1691             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1692             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1693 
+1694             \textcolor{comment}{// pre-compute constant memory}
+1695             h   = gridSizeR * iOne;
+1696             h2  = h * h;
+1697             ih2 = 1.0 / h2;
+1698 
+1699             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1700             tempRatioPhi = ratioPhi * iOne * iOne;
+1701 
+1702 
+1703             \textcolor{comment}{// copy constant to device memory}
+1704             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1705             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1706             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1707             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1708             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1709 
+1710             \textcolor{comment}{// set kernel grid size and block size}
+1711             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1712             dim3 grid\_ThreadPerBlock(16, 16);
+1713 
+1714             \textcolor{comment}{// restriction}
+1715             restriction2DFull<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_RhoChargeDensity, 
+      d\_DeltaResidue, grid\_RRow, grid\_ZColumn, grid\_PhiSlice );
+1716             \textcolor{comment}{//cudaDeviceSynchronize();}
+1717 
+1718             \textcolor{comment}{// zeroing V}
+1719             zeroingVPotential<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1720             \textcolor{comment}{//cudaDeviceSynchronize();}
+1721 
+1722             \textcolor{comment}{// red-black gauss seidel relaxation (nPre times)}
+1723             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPre; i++)
+1724             \{
+1725                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1726                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1727                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1728                 \textcolor{comment}{//cudaDeviceSynchronize();}
+1729             \}
+1730             
+1731         \}
+1733 
+1735 
+1736         \textcolor{comment}{// V-Cycle => from coarser to finer grid}
+1737         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} step = (gridTo - 1); step >= gridFrom; step--)
+1738         \{
+1739             iOne = iOne / 2;
+1740             jOne = jOne / 2;
+1741         
+1742             grid\_RRow       = ((RRow - 1) / iOne) + 1;
+1743             grid\_ZColumn    = ((ZColumn - 1) / jOne) + 1;
+1744 
+1745             grid\_StartPos -= grid\_RRow * grid\_ZColumn * PhiSlice;
+1746             coef\_StartPos -= grid\_RRow;
+1747         
+1748             h   = gridSizeR * iOne;
+1749             h2  = h * h;
+1750             ih2 = 1.0 / h2;
+1751         
+1752             tempRatioZ = ratioZ * iOne * iOne / (jOne * jOne);
+1753             tempRatioPhi = ratioPhi * iOne * iOne;
+1754 
+1755             \textcolor{comment}{// copy constant to device memory}
+1756             cudaMemcpyToSymbol( d\_grid\_StartPos, &grid\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1757             cudaMemcpyToSymbol( d\_coef\_StartPos, &coef\_StartPos, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}), 0, cudaMemcpyHostToDevice
+       );
+1758             cudaMemcpyToSymbol( d\_h2, &h2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1759             cudaMemcpyToSymbol( d\_ih2, &ih2, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1760             cudaMemcpyToSymbol( d\_tempRatioZ, &tempRatioZ, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 0, cudaMemcpyHostToDevice );
+1761 
+1762             \textcolor{comment}{// set kernel grid size and block size}
+1763             dim3 grid\_BlockPerGrid((grid\_RRow < 16) ? 1 : (grid\_RRow / 16), (grid\_ZColumn < 16) ? 1 : (
+      grid\_ZColumn / 16), PhiSlice);
+1764             dim3 grid\_ThreadPerBlock(16, 16);
+1765     
+1766             \textcolor{comment}{// prolongation}
+1767             prolongation2DHalf<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, grid\_RRow, 
+      grid\_ZColumn, grid\_PhiSlice );
+1768 \textcolor{comment}{//          cudaDeviceSynchronize();}
+1769 
+1770             \textcolor{comment}{// red-black gauss seidel relaxation (nPost times)}
+1771             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nPost; i++)
+1772             \{
+1773                 relaxationGaussSeidelRed<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1774 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1775                 relaxationGaussSeidelBlack<<< grid\_BlockPerGrid, grid\_ThreadPerBlock >>>( d\_VPotential, 
+      d\_RhoChargeDensity, grid\_RRow, grid\_ZColumn, grid\_PhiSlice, d\_coef1, d\_coef2, d\_coef3, d\_coef4 );
+1776 \textcolor{comment}{//              cudaDeviceSynchronize();}
+1777             \}
+1778         \}
+1779 
+1780     \textcolor{comment}{/*V-Cycle ends*/}
+1781 
+1782         errorCalculation<<< error\_BlockPerGrid, error\_ThreadPerBlock >>> ( d\_VPotentialPrev, d\_VPotential, 
+      d\_EpsilonError, RRow, ZColumn, PhiSlice);
+1783 
+1784         cudaMemcpy( EpsilonError, d\_EpsilonError, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), cudaMemcpyDeviceToHost );      
+1785         
+1786 
+1787         errorConv[cycle] = *EpsilonError  / (RRow * ZColumn * PhiSlice);
+1788 
+1789         \textcolor{keywordflow}{if} (errorConv[cycle] < convErr)
+1790         \{
+1791             \textcolor{comment}{//errorConv}
+1792             nCycle = cycle;
+1793             iparam[3] = nCycle;
+1794             \textcolor{keywordflow}{break};
+1795         \}
+1796 
+1797         cudaMemcpy( d\_VPotentialPrev, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToDevice );
+1798         cudaMemset( d\_EpsilonError, 0, 1 * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}) );
+1799         
+1800         
+1801         
+1802     \}
+1803 
+1804     cudaDeviceSynchronize();
+1805     \textcolor{comment}{// copy result from device to host}
+1806     cudaMemcpy( temp\_VPotential, d\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}), 
+      cudaMemcpyDeviceToHost );
+1807 
+1808     memcpy(VPotential, temp\_VPotential, RRow * ZColumn * PhiSlice * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+1809 
+1810     \textcolor{comment}{// free device memory}
+1811     cudaFree( d\_VPotential );
+1812     cudaFree( d\_VPotentialPrev );
+1813     cudaFree( d\_EpsilonError );
+1814 
+1815 
+1816     cudaFree( d\_DeltaResidue );
+1817     cudaFree( d\_RhoChargeDensity );
+1818     cudaFree( d\_coef1 );
+1819     cudaFree( d\_coef2 );
+1820     cudaFree( d\_coef3 );
+1821     cudaFree( d\_coef4 );
+1822     cudaFree( d\_icoef4 );
+1823 
+1824     \textcolor{comment}{// free host memory}
+1825     free( coef1 );
+1826     free( coef2 );
+1827     free( coef3 );
+1828     free( coef4 );
+1829     free( icoef4 );
+1830     free( temp\_VPotential );
+1831     \textcolor{comment}{//free( temp\_VPotentialPrev );}
+1832 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_ae81f622f6c82ae791ba4bf486243c0e5}{}\label{PoissonSolver3DGPU_8cu_ae81f622f6c82ae791ba4bf486243c0e5} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!Print\+Matrix@{Print\+Matrix}}
+\index{Print\+Matrix@{Print\+Matrix}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{Print\+Matrix()}{PrintMatrix()}}
+{\footnotesize\ttfamily void Print\+Matrix (\begin{DoxyParamCaption}\item[{float $\ast$}]{Mat,  }\item[{const int}]{Row,  }\item[{const int}]{Column }\end{DoxyParamCaption})}
+
+Print matrix 
+
+Definisi pada baris 675 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+680 \{
+681     printf(\textcolor{stringliteral}{"Matrix (%d,%d)\(\backslash\)n"},Row,Column);
+682     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<Row;i++)
+683     \{
+684         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j=0;j<Column;j++)
+685         \{
+686             printf(\textcolor{stringliteral}{"%11.4g "},Mat[i*Column + j]);
+687         \}
+688         printf(\textcolor{stringliteral}{"\(\backslash\)n"});
+689     \}
+690 
+691 \} 
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a982f277a379105d427d851806c8ba49b}{}\label{PoissonSolver3DGPU_8cu_a982f277a379105d427d851806c8ba49b} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!relaxation\+Gauss\+Seidel\+Black@{relaxation\+Gauss\+Seidel\+Black}}
+\index{relaxation\+Gauss\+Seidel\+Black@{relaxation\+Gauss\+Seidel\+Black}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{relaxation\+Gauss\+Seidel\+Black()}{relaxationGaussSeidelBlack()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+global\+\_\+\+\_\+ void relaxation\+Gauss\+Seidel\+Black (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{float $\ast$}]{coef1,  }\item[{float $\ast$}]{coef2,  }\item[{float $\ast$}]{coef3,  }\item[{float $\ast$}]{coef4 }\end{DoxyParamCaption})}
+
+Relaksasi menggunakan penyelesaian iteratif Red-\/\+Black Gauss-\/\+Seidel (bagian Black)
+
+
+\begin{DoxyParams}{Parameter}
+{\em V\+Potential} & float$\ast$ Array potensial \\
+\hline
+{\em Rho\+Charge\+Density} & float$\ast$ Array rapat arus \\
+\hline
+{\em R\+Row} & int Jumlah baris di arah sumbu $ r $ \\
+\hline
+{\em Z\+Column} & int Jumlah kolom di arah sumbu $ z $ \\
+\hline
+{\em Phi\+Slice} & int Jumlah irisan di arah sumbu $ \phi $ \\
+\hline
+{\em coef1} & float$\ast$ Array untuk koefisien $ V_{x+1,y,z} $ \\
+\hline
+{\em coef2} & float$\ast$ Array untuk koefisien $ V_{x-1,y,z} $ \\
+\hline
+{\em coef3} & float$\ast$ Array untuk koefisien $ z $ \\
+\hline
+{\em coef4} & float$\ast$ Array untuk koefisien $ f(r,\phi,z) $ \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 104 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+115 \{
+116     \textcolor{keywordtype}{int} index\_x, index\_y, index, index\_left, index\_right, index\_up, index\_down, index\_front, index\_back, 
+      index\_coef;
+117 
+118     index\_x = blockIdx.x * blockDim.x + threadIdx.x;
+119     index\_y = blockIdx.y * blockDim.y + threadIdx.y;
+120 
+121     index       = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + index\_x;
+122     index\_left  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x - 1);
+123     index\_right = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x + 1);
+124     index\_up    = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y - 1) * ZColumn + index\_x;
+125     index\_down  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y + 1) * ZColumn + index\_x;
+126     index\_front = d\_grid\_StartPos + ((blockIdx.z - 1 + PhiSlice) % PhiSlice) * RRow * ZColumn + index\_y * 
+      ZColumn + index\_x;
+127     index\_back  = d\_grid\_StartPos + ((blockIdx.z + 1) % PhiSlice) * RRow * ZColumn + index\_y * ZColumn + 
+      index\_x;
+128     index\_coef  = d\_coef\_StartPos + index\_y;
+129 
+130     \textcolor{keywordflow}{if} (index\_x != 0 && index\_x < (ZColumn - 1) && index\_y != 0 && index\_y < (RRow - 1))
+131     \{
+132         \textcolor{comment}{//calculate black       }
+133         \textcolor{keywordflow}{if} ((blockIdx.z % 2 == 0 && (index\_x + index\_y) % 2 != 0) || (blockIdx.z % 2 != 0 && (index\_x + 
+      index\_y) % 2 == 0))
+134         \{           
+135             VPotential[index] = (coef2[index\_coef] * VPotential[index\_up] + 
+136                                 coef1[index\_coef] * VPotential[index\_down] +                                
+137                                 d\_tempRatioZ * (VPotential[index\_left] + VPotential[index\_right]) + 
+138                                 coef3[index\_coef] * (VPotential[index\_front] + VPotential[index\_back]) + 
+139                                 d\_h2 * RhoChargeDensity[index]) * coef4[index\_coef];
+140         \}
+141     \}
+142 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a6717666a25f968bb1d43300401b2fefb}{}\label{PoissonSolver3DGPU_8cu_a6717666a25f968bb1d43300401b2fefb} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!relaxation\+Gauss\+Seidel\+Red@{relaxation\+Gauss\+Seidel\+Red}}
+\index{relaxation\+Gauss\+Seidel\+Red@{relaxation\+Gauss\+Seidel\+Red}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{relaxation\+Gauss\+Seidel\+Red()}{relaxationGaussSeidelRed()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+global\+\_\+\+\_\+ void relaxation\+Gauss\+Seidel\+Red (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{float $\ast$}]{coef1,  }\item[{float $\ast$}]{coef2,  }\item[{float $\ast$}]{coef3,  }\item[{float $\ast$}]{coef4 }\end{DoxyParamCaption})}
+
+Relaksasi menggunakan penyelesaian iteratif Red-\/\+Black Gauss-\/\+Seidel (bagian Red)
+
+
+\begin{DoxyParams}{Parameter}
+{\em V\+Potential} & float$\ast$ Array potensial \\
+\hline
+{\em Rho\+Charge\+Density} & float$\ast$ Array rapat arus \\
+\hline
+{\em R\+Row} & int Jumlah baris di arah sumbu $ r $ \\
+\hline
+{\em Z\+Column} & int Jumlah kolom di arah sumbu $ z $ \\
+\hline
+{\em Phi\+Slice} & int Jumlah irisan di arah sumbu $ \phi $ \\
+\hline
+{\em coef1} & float$\ast$ Array untuk koefisien $ V_{x+1,y,z} $ \\
+\hline
+{\em coef2} & float$\ast$ Array untuk koefisien $ V_{x-1,y,z} $ \\
+\hline
+{\em coef3} & float$\ast$ Array untuk koefisien $ z $ \\
+\hline
+{\em coef4} & float$\ast$ Array untuk koefisien $ f(r,\phi,z) $ \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 52 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+63 \{
+64     \textcolor{keywordtype}{int} index\_x, index\_y, index, index\_left, index\_right, index\_up, index\_down, index\_front, index\_back, 
+      index\_coef;
+65 
+66     index\_x = blockIdx.x * blockDim.x + threadIdx.x;
+67     index\_y = blockIdx.y * blockDim.y + threadIdx.y;
+68 
+69     index       = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + index\_x;
+70     index\_left  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x - 1);
+71     index\_right = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x + 1);
+72     index\_up    = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y - 1) * ZColumn + index\_x;
+73     index\_down  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y + 1) * ZColumn + index\_x;
+74     index\_front = d\_grid\_StartPos + ((blockIdx.z - 1 + PhiSlice) % PhiSlice) * RRow * ZColumn + index\_y * 
+      ZColumn + index\_x;
+75     index\_back  = d\_grid\_StartPos + ((blockIdx.z + 1) % PhiSlice) * RRow * ZColumn + index\_y * ZColumn + 
+      index\_x;
+76     index\_coef  = d\_coef\_StartPos + index\_y;
+77 
+78     \textcolor{keywordflow}{if} (index\_x != 0 && index\_x < (ZColumn - 1) && index\_y != 0 && index\_y < (RRow - 1))
+79     \{
+80         \textcolor{comment}{//calculate red         }
+81         \textcolor{keywordflow}{if} ((blockIdx.z % 2 == 0 && (index\_x + index\_y) % 2 == 0) || (blockIdx.z % 2 != 0 && (index\_x + 
+      index\_y) % 2 != 0))
+82         \{           
+83             VPotential[index] = (coef2[index\_coef] * VPotential[index\_up] + 
+84                                 coef1[index\_coef] * VPotential[index\_down] + 
+85                                 d\_tempRatioZ * (VPotential[index\_left] + VPotential[index\_right]) + 
+86                                 coef3[index\_coef] * (VPotential[index\_front] + VPotential[index\_back]) + 
+87                                 d\_h2 * RhoChargeDensity[index]) * coef4[index\_coef];
+88         \}
+89     \}
+90 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a18166fae41f28362a43f5f09f3ddb537}{}\label{PoissonSolver3DGPU_8cu_a18166fae41f28362a43f5f09f3ddb537} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!residue\+Calculation@{residue\+Calculation}}
+\index{residue\+Calculation@{residue\+Calculation}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{residue\+Calculation()}{residueCalculation()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+global\+\_\+\+\_\+ void residue\+Calculation (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{float $\ast$}]{Delta\+Residue,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{float $\ast$}]{coef1,  }\item[{float $\ast$}]{coef2,  }\item[{float $\ast$}]{coef3,  }\item[{float $\ast$}]{icoef4 }\end{DoxyParamCaption})}
+
+Menghitung residu dari hasil proses relaksasi
+
+Rumus\+:
+
+
+\begin{DoxyParams}{Parameter}
+{\em V\+Potential} & float$\ast$ Array potensial \\
+\hline
+{\em Rho\+Charge\+Density} & float$\ast$ Array rapat arus \\
+\hline
+{\em Delta\+Residue} & float$\ast$ Array residu \\
+\hline
+{\em R\+Row} & int Jumlah baris di arah sumbu $ r $ \\
+\hline
+{\em Z\+Column} & int Jumlah kolom di arah sumbu $ z $ \\
+\hline
+{\em Phi\+Slice} & int Jumlah irisan di arah sumbu $ \phi $ \\
+\hline
+{\em coef1} & float$\ast$ Array untuk koefisien $ V_{x+1,y,z} $ \\
+\hline
+{\em coef2} & float$\ast$ Array untuk koefisien $ V_{x-1,y,z} $ \\
+\hline
+{\em coef3} & float$\ast$ Array untuk koefisien $ z $ \\
+\hline
+{\em icoef4} & float$\ast$ Array untuk koefisien invers dari $ f(r,\phi,z) $ \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 160 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+172 \{
+173     \textcolor{keywordtype}{int} index\_x, index\_y, index, index\_left, index\_right, index\_up, index\_down, index\_front, index\_back, 
+      index\_coef;
+174 
+175     index\_x = blockIdx.x * blockDim.x + threadIdx.x;
+176     index\_y = blockIdx.y * blockDim.y + threadIdx.y;
+177 
+178     index       = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + index\_x;
+179     index\_left  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x - 1);
+180     index\_right = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + (index\_x + 1);
+181     index\_up    = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y - 1) * ZColumn + index\_x;
+182     index\_down  = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + (index\_y + 1) * ZColumn + index\_x;
+183     index\_front = d\_grid\_StartPos + ((blockIdx.z - 1 + PhiSlice) % PhiSlice)  * RRow * ZColumn + index\_y * 
+      ZColumn + index\_x;
+184     index\_back  = d\_grid\_StartPos + ((blockIdx.z + 1) % PhiSlice)  * RRow * ZColumn + index\_y * ZColumn + 
+      index\_x;
+185     index\_coef  = d\_coef\_StartPos + index\_y;
+186 
+187     \textcolor{keywordflow}{if} (index\_x != 0 && index\_x < (ZColumn - 1) && index\_y != 0 && index\_y < (RRow - 1))
+188     \{
+189         DeltaResidue[index] = d\_ih2 * (coef2[index\_coef] * VPotential[index\_up] +
+190                         coef1[index\_coef] * VPotential[index\_down] +
+191                         d\_tempRatioZ * (VPotential[index\_left] + VPotential[index\_right]) +
+192                         coef3[index\_coef] * (VPotential[index\_front] + VPotential[index\_back]) -
+193                         icoef4[index\_coef] * VPotential[index]) + RhoChargeDensity[index];
+194     \}
+195 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a1b6e721fb1d6d9d4155465f1af16c8aa}{}\label{PoissonSolver3DGPU_8cu_a1b6e721fb1d6d9d4155465f1af16c8aa} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!Restrict\+\_\+\+Boundary@{Restrict\+\_\+\+Boundary}}
+\index{Restrict\+\_\+\+Boundary@{Restrict\+\_\+\+Boundary}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{Restrict\+\_\+\+Boundary()}{Restrict\_Boundary()}}
+{\footnotesize\ttfamily void Restrict\+\_\+\+Boundary (\begin{DoxyParamCaption}\item[{float $\ast$}]{V\+Potential,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice,  }\item[{const int}]{Offset }\end{DoxyParamCaption})}
+
+top left (0,0)
+
+boundary in top and down for ( j = 1, jj =2; j $<$ Z\+Column-\/1 ; j++,jj+=2) \{ V\+Potential\mbox{[}Offset + slice\+Start + (0 $\ast$ Z\+Column) + j\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (0 $\ast$ finer\+\_\+\+Z\+Column) + jj\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (0 $\ast$ finer\+\_\+\+Z\+Column) + jj -\/ 1\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (0 $\ast$ finer\+\_\+\+Z\+Column) + jj + 1\mbox{]};
+
+V\+Potential\mbox{[}Offset + slice\+Start + ((R\+Row -\/ 1) $\ast$ Z\+Column) + j\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/1) $\ast$ finer\+\_\+\+Z\+Column) + jj\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/1) $\ast$ finer\+\_\+\+Z\+Column) + jj -\/ 1\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/1) $\ast$ finer\+\_\+\+Z\+Column) + jj + 1\mbox{]};
+
+\begin{DoxyVerb}    }
+\end{DoxyVerb}
+
+
+boundary in left and right for ( i = 1, ii =2; i $<$ R\+Row -\/ 1 ; i++,ii+=2) \{ V\+Potential\mbox{[}Offset + slice\+Start + (i $\ast$ Z\+Column)\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (ii $\ast$ finer\+\_\+\+Z\+Column)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((ii-\/1) $\ast$ finer\+\_\+\+Z\+Column)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((ii + 1) $\ast$ finer\+\_\+\+Z\+Column)\mbox{]};
+
+V\+Potential\mbox{[}Offset + slice\+Start + (i $\ast$ Z\+Column) + (Z\+Column -\/ 1)\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (ii $\ast$ finer\+\_\+\+Z\+Column) + jj + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((ii -\/1) $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((ii +1) $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]};
+
+\}
+
+top left (0,0) \begin{DoxyVerb}    VPotential[Offset + sliceStart + (0 * ZColumn) + 0] =
+        0.5 * VPotential[finer_Offset  + finer_SliceStart] +
+        0.25 * VPotential[finer_Offset + finer_SliceStart + (0 * finer_ZColumn) + 1] +
+        0.25 * VPotential[finer_Offset + finer_SliceStart + (1 * finer_ZColumn)];
+\end{DoxyVerb}
+
+
+top right V\+Potential\mbox{[}Offset + slice\+Start + (0 $\ast$ Z\+Column) + (Z\+Column -\/ 1) \mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (0 $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/1) \mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (0 $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 2)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + (1 $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]};
+
+bottom left V\+Potential\mbox{[}Offset + slice\+Start + ((R\+Row -\/ 1) $\ast$ Z\+Column) + 0\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 1) $\ast$ finer\+\_\+\+Z\+Column) + 0\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 1) $\ast$ finer\+\_\+\+Z\+Column) + 1\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 2) $\ast$ finer\+\_\+\+Z\+Column) + 0\mbox{]};
+
+bottom right V\+Potential\mbox{[}Offset + slice\+Start + ((R\+Row -\/ 1) $\ast$ Z\+Column) + (Z\+Column -\/ 1)\mbox{]} = 0.\+5 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 1) $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 1) $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 2)\mbox{]} + 0.\+25 $\ast$ V\+Potential\mbox{[}finer\+\_\+\+Offset + finer\+\_\+\+Slice\+Start + ((finer\+\_\+\+R\+Row -\/ 2) $\ast$ finer\+\_\+\+Z\+Column) + (finer\+\_\+\+Z\+Column -\/ 1)\mbox{]};
+
+\}
+
+Definisi pada baris 566 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+573 \{
+574     \textcolor{keywordtype}{int} i,ii,j,jj;      
+575     \textcolor{keywordtype}{int} finer\_RRow = 2 * RRow - 1;
+576     \textcolor{keywordtype}{int} finer\_ZColumn = 2 * ZColumn - 1;
+577     
+578     \textcolor{keywordtype}{int} finer\_Offset = Offset - (finer\_RRow * finer\_ZColumn * PhiSlice);
+579     \textcolor{keywordtype}{int} sliceStart;
+580     \textcolor{keywordtype}{int} finer\_SliceStart;
+581 
+582     \textcolor{comment}{//printf("(%d,%d,%d) -> (%d,%d,%d)\(\backslash\)n",RRow,ZColumn,Offset,finer\_RRow,finer\_ZColumn,finer\_Offset); }
+583     \textcolor{comment}{// do for each slice}
+584     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{int} m = 0;m < PhiSlice;m++)
+585     \{   
+586         sliceStart = m * (RRow * ZColumn);
+587         finer\_SliceStart = m * (finer\_RRow * finer\_ZColumn);
+588         \textcolor{comment}{// copy boundary}
+589         \textcolor{keywordflow}{for} ( j = 0, jj =0; j < ZColumn ; j++,jj+=2) 
+590         \{
+591             VPotential[Offset + sliceStart + (0 * ZColumn) + j] =
+592                 VPotential[finer\_Offset + finer\_SliceStart + (0 * finer\_ZColumn) + jj];
+593 
+594             VPotential[Offset + sliceStart + ((RRow - 1) * ZColumn) + j] =
+595                 VPotential[finer\_Offset + finer\_SliceStart + ((finer\_RRow -1) * finer\_ZColumn) + jj];
+596 
+597         \}       
+598         \textcolor{keywordflow}{for} ( i = 0, ii =0; i < RRow  ; i++,ii+=2) \{
+599             VPotential[Offset + sliceStart + (i * ZColumn)] =
+600                 VPotential[finer\_Offset + finer\_SliceStart + (ii * finer\_ZColumn)];
+601             
+602             VPotential[Offset + sliceStart + (i * ZColumn) + (ZColumn - 1)] =
+603                 VPotential[finer\_Offset + finer\_SliceStart + (ii * finer\_ZColumn) + (finer\_ZColumn - 1)];
+604 
+605         \}
+606     \}
+668 \}
+\end{DoxyCode}
+\hypertarget{PoissonSolver3DGPU_8cu_a249cfc3540088682931971eada57399c}{}\label{PoissonSolver3DGPU_8cu_a249cfc3540088682931971eada57399c} 
+\index{Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}!restriction2\+D\+Full@{restriction2\+D\+Full}}
+\index{restriction2\+D\+Full@{restriction2\+D\+Full}!Poisson\+Solver3\+D\+G\+P\+U.\+cu@{Poisson\+Solver3\+D\+G\+P\+U.\+cu}}
+\subsubsection{\texorpdfstring{restriction2\+D\+Full()}{restriction2DFull()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+global\+\_\+\+\_\+ void restriction2\+D\+Full (\begin{DoxyParamCaption}\item[{float $\ast$}]{Rho\+Charge\+Density,  }\item[{float $\ast$}]{Delta\+Residue,  }\item[{const int}]{R\+Row,  }\item[{const int}]{Z\+Column,  }\item[{const int}]{Phi\+Slice }\end{DoxyParamCaption})}
+
+Restriksi dari finer grid ke coarser grid dengan operator Half Weighting
+
+$ I_h^{2h} = \frac{1}{8} \begin{bmatrix}[ccc] 0 & 1 & 0 \\ 1 & 4 & 1\\ 0 & 1 & 0 \end{bmatrix} \param RhoChargeDensity float* Array rapat arus \param DeltaResidue float* Array residu hasil relaksasi \param RRow const int Jumlah baris di arah sumbu $ r $ \param ZColumn const int Jumlah kolom di arah sumbu $ z $ \param PhiSlice const int Jumlah irisan di arah sumbu $  $ __global__ void restriction2DHalf ( float *RhoChargeDensity, float *DeltaResidue, const int RRow, const int ZColumn, const int PhiSlice ) { int index_x, index_y, index; int finer_RRow, finer_ZColumn, finer_grid_StartPos; int finer_index_x, finer_index_y, finer_index, finer_index_left, finer_index_right, finer_index_up, finer_index_down; index_x = blockIdx.x * blockDim.x + threadIdx.x; index_y = blockIdx.y * blockDim.y + threadIdx.y; index = d_grid_StartPos + blockIdx.z * RRow * ZColumn + index_y * ZColumn + index_x; finer_RRow = 2 * RRow - 1; finer_ZColumn = 2 * ZColumn - 1; finer_grid_StartPos = d_grid_StartPos - (finer_RRow * finer_ZColumn * PhiSlice); finer_index_x = index_x * 2; finer_index_y = index_y * 2; finer_index = finer_grid_StartPos + blockIdx.z * finer_RRow * finer_ZColumn + finer_index_y * finer_ZColumn + finer_index_x; finer_index_left = finer_grid_StartPos + blockIdx.z * finer_RRow * finer_ZColumn + finer_index_y * finer_ZColumn + (finer_index_x - 1); finer_index_right = finer_grid_StartPos + blockIdx.z * finer_RRow * finer_ZColumn + finer_index_y * finer_ZColumn + (finer_index_x + 1); finer_index_up = finer_grid_StartPos + blockIdx.z * finer_RRow * finer_ZColumn + (finer_index_y - 1) * finer_ZColumn + finer_index_x; finer_index_down = finer_grid_StartPos + blockIdx.z * finer_RRow * finer_ZColumn + (finer_index_y + 1) * finer_ZColumn + finer_index_x; if (index_x != 0 && index_x < (ZColumn - 1) && index_y != 0 && index_y < (RRow - 1)) { RhoChargeDensity[index] = 0.5 * DeltaResidue[finer_index] + 0.125 * (DeltaResidue[finer_index_left] + DeltaResidue[finer_index_right] + DeltaResidue[finer_index_up] + DeltaResidue[finer_index_down]); } } Restriksi dari finer grid ke coarser grid dengan operator Full Weighting $ I\+\_\+h$^\wedge$\{2h\} = \{1\}\{16\} \{bmatrix\}\mbox{[}ccc\mbox{]} 1 \& 2 \& 1 \textbackslash{} 2 \& 4 \& 2\textbackslash{} 1 \& 2 \& 1 \{bmatrix\}
+
+
+\begin{DoxyParams}{Parameter}
+{\em Rho\+Charge\+Density} & float$\ast$ Array rapat arus \\
+\hline
+{\em Delta\+Residue} & float$\ast$ Array residu hasil relaksasi \\
+\hline
+{\em R\+Row} & const int Jumlah baris di arah sumbu $ r $ \\
+\hline
+{\em Z\+Column} & const int Jumlah kolom di arah sumbu $ z $ \\
+\hline
+{\em Phi\+Slice} & const int Jumlah irisan di arah sumbu $ \phi $ \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 253 dalam file Poisson\+Solver3\+D\+G\+P\+U.\+cu.
+
+
+\begin{DoxyCode}
+260 \{
+261     \textcolor{keywordtype}{int} index\_x, index\_y, index;
+262     \textcolor{keywordtype}{int} finer\_RRow, finer\_ZColumn, finer\_grid\_StartPos;
+263     \textcolor{keywordtype}{int} finer\_index\_x, finer\_index\_y, finer\_index, finer\_index\_left, finer\_index\_right, finer\_index\_up, 
+      finer\_index\_down;
+264     \textcolor{keywordtype}{int} finer\_index\_up\_left, finer\_index\_up\_right, finer\_index\_down\_left, finer\_index\_down\_right;
+265     
+266     index\_x = blockIdx.x * blockDim.x + threadIdx.x;
+267     index\_y = blockIdx.y * blockDim.y + threadIdx.y;
+268     index   = d\_grid\_StartPos + blockIdx.z * RRow * ZColumn + index\_y * ZColumn + index\_x;
+269 
+270     finer\_RRow = 2 * RRow - 1;
+271     finer\_ZColumn = 2 * ZColumn - 1;
+272 
+273     finer\_grid\_StartPos = d\_grid\_StartPos - (finer\_RRow * finer\_ZColumn * PhiSlice);
+274 
+275     finer\_index\_x = index\_x * 2;
+276     finer\_index\_y = index\_y * 2;
+277 
+278     finer\_index         = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + finer\_index\_y * 
+      finer\_ZColumn + finer\_index\_x;
+279     finer\_index\_left    = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + finer\_index\_y * 
+      finer\_ZColumn + (finer\_index\_x - 1);
+280     finer\_index\_right   = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + finer\_index\_y * 
+      finer\_ZColumn + (finer\_index\_x + 1);
+281     finer\_index\_up      = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (finer\_index\_y - 
+      1) * finer\_ZColumn + finer\_index\_x;
+282     finer\_index\_down    = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (finer\_index\_y + 
+      1) * finer\_ZColumn + finer\_index\_x;
+283     finer\_index\_up\_left     = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (
+      finer\_index\_y - 1) * finer\_ZColumn + (finer\_index\_x - 1);
+284     finer\_index\_up\_right    = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (
+      finer\_index\_y - 1) * finer\_ZColumn + (finer\_index\_x + 1);
+285     finer\_index\_down\_left   = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (
+      finer\_index\_y + 1) * finer\_ZColumn + (finer\_index\_x - 1);
+286     finer\_index\_down\_right  = finer\_grid\_StartPos + blockIdx.z * finer\_RRow * finer\_ZColumn + (
+      finer\_index\_y + 1) * finer\_ZColumn + (finer\_index\_x + 1);
+287 
+288     \textcolor{keywordflow}{if} (index\_x != 0 && index\_x < (ZColumn - 1) && index\_y != 0 && index\_y < (RRow - 1))
+289     \{
+290         RhoChargeDensity[index] = 0.25 * DeltaResidue[finer\_index] +
+291                                 0.125 * (DeltaResidue[finer\_index\_left] + DeltaResidue[finer\_index\_right] +
+       DeltaResidue[finer\_index\_up] + DeltaResidue[finer\_index\_down]) +
+292                                 0.0625 * (DeltaResidue[finer\_index\_up\_left] + DeltaResidue[
+      finer\_index\_up\_right] + DeltaResidue[finer\_index\_down\_left] + DeltaResidue[finer\_index\_down\_right]);
+293     \} \textcolor{keywordflow}{else} \{
+294         RhoChargeDensity[index] =  DeltaResidue[finer\_index];
+295     \}
+296     
+297 
+298 \}
+\end{DoxyCode}

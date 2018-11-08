@@ -1,0 +1,443 @@
+\hypertarget{classPoissonSolver3DCylindricalGPU}{}\section{Referensi Kelas Poisson\+Solver3\+D\+Cylindrical\+G\+PU}
+\label{classPoissonSolver3DCylindricalGPU}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+
+
+Kelas ini merupakan interface Poisson\+Solver 3D dalam koordinat silindrikal yang diterapkan pada N\+V\+D\+IA Cuda.  
+
+
+
+
+{\ttfamily \#include $<$Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h$>$}
+
+\subsection*{Kelas}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structPoissonSolver3DCylindricalGPU_1_1MGParameters}{M\+G\+Parameters}
+\end{DoxyCompactItemize}
+\subsection*{Tipe Publik}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{Strategy\+Type} \{ \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180af52763d2ca25e946b8aedc135297512c}{k\+Relaxation} = 0, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab4c32d8aac8f42c5486b5f94649d64a4}{k\+Multi\+Grid} = 1, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab7013b3a2eeeccf764d8df057642a493}{k\+Fast\+Relaxation} = 2
+ \}\begin{DoxyCompactList}\small\item\em $<$ Enumeration of Poisson Solver Strategy Type \end{DoxyCompactList}
+\item 
+enum \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffc}{Cycle\+Type} \{ \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca054722483f44c7c54be32469c889cd25}{k\+V\+Cycle} = 0, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffcaa9330e183e43288c3e7c0c80755500a5}{k\+W\+Cycle} = 1, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca2bff33584c1562c46db72a65338942bf}{k\+F\+Cycle} = 2
+ \}
+\item 
+enum \hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244}{Grid\+Transfer\+Type} \{ \hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244a4d379724e5d895336a8ef3fc05b9c0f1}{k\+Half} = 0, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244afd0434b0061c5f056bc52c974ab97c45}{k\+Full} = 1
+ \}
+\item 
+enum \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499}{Relax\+Type} \{ \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499ac8aa88956983b837547940c043acc338}{k\+Jacobi} = 0, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a6cfc0a8bf688cea321bfb31bc5ffb5f6}{k\+Weighted\+Jacobi} = 1, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a4e13ece57b52474aadbfdf204f624e80}{k\+Gauss\+Seidel} = 2
+ \}
+\item 
+enum \hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07a}{Interp\+Type} \{ \hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa697ed9274ff84e68a071627f249dd298}{k\+Half\+Interp} = 0, 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa150731880e4a55bbd718c6c18d579719}{k\+Full\+Interp} = 1
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Fungsi Anggota Publik}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a4af8506bc7d3b3e06c0337972481f3a2}{}\label{classPoissonSolver3DCylindricalGPU_a4af8506bc7d3b3e06c0337972481f3a2} 
+void {\bfseries Set\+Exact\+Solution} (float $\ast$exact\+Solution, const int f\+Phi\+Slices)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a2b4b3e4378a47ba572edded636a73d73}{}\label{classPoissonSolver3DCylindricalGPU_a2b4b3e4378a47ba572edded636a73d73} 
+void {\bfseries Set\+Cycle\+Type} (\hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffc}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Cycle\+Type} cycle\+Type)
+\item 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a3c4108b642189cca05ad6715fde97457}{Poisson\+Solver3\+D\+Cylindrical\+G\+PU} ()
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_aa3aad0a87c455600dd89c1a1a09664da}{}\label{classPoissonSolver3DCylindricalGPU_aa3aad0a87c455600dd89c1a1a09664da} 
+{\bfseries Poisson\+Solver3\+D\+Cylindrical\+G\+PU} (int n\+R\+Row, int n\+Z\+Column, int n\+Phi\+Slice)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_aeaad1e86e363d59d364596181224abbb}{}\label{classPoissonSolver3DCylindricalGPU_aeaad1e86e363d59d364596181224abbb} 
+{\bfseries Poisson\+Solver3\+D\+Cylindrical\+G\+PU} (const char $\ast$name, const char $\ast$title)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a776eea4dd332fb6923f73e9a5c9124ee}{}\label{classPoissonSolver3DCylindricalGPU_a776eea4dd332fb6923f73e9a5c9124ee} 
+virtual \hyperlink{classPoissonSolver3DCylindricalGPU_a776eea4dd332fb6923f73e9a5c9124ee}{$\sim$\+Poisson\+Solver3\+D\+Cylindrical\+G\+PU} ()
+\begin{DoxyCompactList}\small\item\em destructor \end{DoxyCompactList}\item 
+void \hyperlink{classPoissonSolver3DCylindricalGPU_aa95de949f9cb368eb0c9ee1b8d990a7f}{Poisson\+Solver3D} (float $\ast$matricesV, float $\ast$matrices\+Charge\+Densities, int n\+R\+Row, int n\+Z\+Column, int phi\+Slice, int max\+Iterations, int symmetry)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_adedaba4fea9617006fd48791e2c50d90}{}\label{classPoissonSolver3DCylindricalGPU_adedaba4fea9617006fd48791e2c50d90} 
+void {\bfseries Set\+Strategy} (\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{Strategy\+Type} strategy)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a9156fb9e54827b78ba8dfbc85ca449b3}{}\label{classPoissonSolver3DCylindricalGPU_a9156fb9e54827b78ba8dfbc85ca449b3} 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{Strategy\+Type} {\bfseries Get\+Strategy} ()
+\item 
+void \hyperlink{classPoissonSolver3DCylindricalGPU_af269b7d4472ee9681f9d372373f1e7f8}{Set\+Exact\+Solution} (float $\ast$exact\+Solution, int n\+R\+Row, int n\+Z\+Column, int phi\+Slice)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a926050142aa1870d8901e59f0bd80599}{}\label{classPoissonSolver3DCylindricalGPU_a926050142aa1870d8901e59f0bd80599} 
+float {\bfseries Get\+Error\+Conv} (int iteration)
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a1f873b485195b892f7d6e7095ead417e}{}\label{classPoissonSolver3DCylindricalGPU_a1f873b485195b892f7d6e7095ead417e} 
+float {\bfseries Get\+Error\+Exact} (int iteration)
+\end{DoxyCompactItemize}
+\subsection*{Atribut Publik}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a82ad65b31daff47f33c7c7fb8ad95e81}{}\label{classPoissonSolver3DCylindricalGPU_a82ad65b31daff47f33c7c7fb8ad95e81} 
+int \hyperlink{classPoissonSolver3DCylindricalGPU_a82ad65b31daff47f33c7c7fb8ad95e81}{f\+Iterations}
+\begin{DoxyCompactList}\small\item\em number of maximum iteration \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a0d5484e574537bc26978992b88573517}{}\label{classPoissonSolver3DCylindricalGPU_a0d5484e574537bc26978992b88573517} 
+\hyperlink{structPoissonSolver3DCylindricalGPU_1_1MGParameters}{M\+G\+Parameters} \hyperlink{classPoissonSolver3DCylindricalGPU_a0d5484e574537bc26978992b88573517}{f\+Mg\+Parameters}
+\begin{DoxyCompactList}\small\item\em parameters multi grid \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a02b05af75fd8b5b0671166638d0d11bd}{}\label{classPoissonSolver3DCylindricalGPU_a02b05af75fd8b5b0671166638d0d11bd} 
+\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{Strategy\+Type} \hyperlink{classPoissonSolver3DCylindricalGPU_a02b05af75fd8b5b0671166638d0d11bd}{f\+Strategy}
+\begin{DoxyCompactList}\small\item\em strategy used default multi\+Grid \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_af9b78d83ed03b2389688351e96d2b183}{}\label{classPoissonSolver3DCylindricalGPU_af9b78d83ed03b2389688351e96d2b183} 
+float $\ast$ {\bfseries f\+Exact\+SolutionF}
+\end{DoxyCompactItemize}
+\subsection*{Atribut Publik Statis}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a63ee7986eb68a318936a1ff5dcf1b374}{}\label{classPoissonSolver3DCylindricalGPU_a63ee7986eb68a318936a1ff5dcf1b374} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_a63ee7986eb68a318936a1ff5dcf1b374}{fgk\+T\+P\+C\+Z0} = 249.\+7
+\begin{DoxyCompactList}\small\item\em nominal gating grid position \end{DoxyCompactList}\item 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_a6688ba03a837d4919001cd0aa14ef80e}{fgk\+I\+F\+C\+Radius} = 83.\+5
+\begin{DoxyCompactList}\small\item\em Mean Radius of the Inner Field Cage ( 82.\+43 min, 83.\+70 max) (cm) \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_ac7da41dc5ec3589d855ae7569f34734d}{}\label{classPoissonSolver3DCylindricalGPU_ac7da41dc5ec3589d855ae7569f34734d} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_ac7da41dc5ec3589d855ae7569f34734d}{fgk\+O\+F\+C\+Radius} = 254.\+5
+\begin{DoxyCompactList}\small\item\em Mean Radius of the Outer Field Cage (252.\+55 min, 256.\+45 max) (cm) \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_afadd2484d1f621ff6424c9a007b67846}{}\label{classPoissonSolver3DCylindricalGPU_afadd2484d1f621ff6424c9a007b67846} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_afadd2484d1f621ff6424c9a007b67846}{fgk\+Z\+Off\+Set} = 0.\+2
+\begin{DoxyCompactList}\small\item\em Offset from CE\+: calculate all distortions closer to CE as if at this point. \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a7f5bfebf7555b8d9182a1806170a3565}{}\label{classPoissonSolver3DCylindricalGPU_a7f5bfebf7555b8d9182a1806170a3565} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_a7f5bfebf7555b8d9182a1806170a3565}{fgk\+CathodeV} = -\/100000.\+0
+\begin{DoxyCompactList}\small\item\em Cathode Voltage (volts) \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_af694481902e89319c08ac59eac5e0989}{}\label{classPoissonSolver3DCylindricalGPU_af694481902e89319c08ac59eac5e0989} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_af694481902e89319c08ac59eac5e0989}{fgk\+GG} = -\/70.\+0
+\begin{DoxyCompactList}\small\item\em Gating Grid voltage (volts) \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a8314f125dccb8e231eda4d463e7ec86a}{}\label{classPoissonSolver3DCylindricalGPU_a8314f125dccb8e231eda4d463e7ec86a} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_a8314f125dccb8e231eda4d463e7ec86a}{fgkdvdE} = 0.\+0024
+\begin{DoxyCompactList}\small\item\em \mbox{[}cm/V\mbox{]} drift velocity dependency on the E field (from Magboltz for Ne\+C\+O2\+N2 at standard environment) \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_a5fa7b4543d1140a49d2ca3cc85126cfb}{}\label{classPoissonSolver3DCylindricalGPU_a5fa7b4543d1140a49d2ca3cc85126cfb} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_a5fa7b4543d1140a49d2ca3cc85126cfb}{fgk\+EM} = -\/1.\+602176487e-\/19 / 9.\+10938215e-\/31
+\begin{DoxyCompactList}\small\item\em charge/mass in \mbox{[}C/kg\mbox{]} \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_ad324850ca2018294f266470a27ffff4a}{}\label{classPoissonSolver3DCylindricalGPU_ad324850ca2018294f266470a27ffff4a} 
+static const float \hyperlink{classPoissonSolver3DCylindricalGPU_ad324850ca2018294f266470a27ffff4a}{fgke0} = 8.\+854187817e-\/12
+\begin{DoxyCompactList}\small\item\em vacuum permittivity \mbox{[}A·s/(V·m)\mbox{]} \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_aec3b2f7c092a1f94cc13d1e9c2d9ecaf}{}\label{classPoissonSolver3DCylindricalGPU_aec3b2f7c092a1f94cc13d1e9c2d9ecaf} 
+static float \hyperlink{classPoissonSolver3DCylindricalGPU_aec3b2f7c092a1f94cc13d1e9c2d9ecaf}{fg\+Exact\+Err} = 1e-\/4
+\begin{DoxyCompactList}\small\item\em Error tolerated. \end{DoxyCompactList}\item 
+\hypertarget{classPoissonSolver3DCylindricalGPU_aa4ca52e88fafce30176d4cae5af7f6d9}{}\label{classPoissonSolver3DCylindricalGPU_aa4ca52e88fafce30176d4cae5af7f6d9} 
+static float \hyperlink{classPoissonSolver3DCylindricalGPU_aa4ca52e88fafce30176d4cae5af7f6d9}{fg\+Convergence\+Error} = 1e-\/3
+\begin{DoxyCompactList}\small\item\em Error tolerated. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Keterangan Lengkap}
+Kelas ini merupakan interface Poisson\+Solver 3D dalam koordinat silindrikal yang diterapkan pada N\+V\+D\+IA Cuda. 
+
+\begin{DoxyAuthor}{Penulis}
+Rifki Sadikin \href{mailto:rifki.sadikin@cern.ch}{\tt rifki.\+sadikin@cern.\+ch}, Indonesian Institute of Sciences 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Tanggal}
+Nov 8, 2018
+\end{DoxyDate}
+\begin{DoxyAuthor}{Penulis}
+Rifki Sadikin \href{mailto:rifki.sadikin@cern.ch}{\tt rifki.\+sadikin@cern.\+ch}, Indonesian Institute of Sciences 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Tanggal}
+Nov 20, 2017 
+\end{DoxyDate}
+
+
+Definisi pada baris 15 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+
+\subsection{Dokumentasi Anggota\+: Enumerasi}
+\hypertarget{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffc}{}\label{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffc} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Cycle\+Type@{Cycle\+Type}}
+\index{Cycle\+Type@{Cycle\+Type}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Cycle\+Type}{CycleType}}
+{\footnotesize\ttfamily enum \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffc}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Cycle\+Type}}
+
+\begin{DoxyEnumFields}{Nilai enumerasi}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+V\+Cycle@{k\+V\+Cycle}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+V\+Cycle@{k\+V\+Cycle}}}\hypertarget{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca054722483f44c7c54be32469c889cd25}{}\label{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca054722483f44c7c54be32469c889cd25} 
+k\+V\+Cycle&V Cycle. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+W\+Cycle@{k\+W\+Cycle}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+W\+Cycle@{k\+W\+Cycle}}}\hypertarget{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffcaa9330e183e43288c3e7c0c80755500a5}{}\label{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffcaa9330e183e43288c3e7c0c80755500a5} 
+k\+W\+Cycle&W Cycle (T\+O\+DO) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+F\+Cycle@{k\+F\+Cycle}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+F\+Cycle@{k\+F\+Cycle}}}\hypertarget{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca2bff33584c1562c46db72a65338942bf}{}\label{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca2bff33584c1562c46db72a65338942bf} 
+k\+F\+Cycle&Full Cycle. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definisi pada baris 25 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+\begin{DoxyCode}
+25                  \{
+26     \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca054722483f44c7c54be32469c889cd25}{kVCycle} = 0,    
+27     \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffcaa9330e183e43288c3e7c0c80755500a5}{kWCycle} = 1,    
+28     \hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca2bff33584c1562c46db72a65338942bf}{kFCycle} = 2      
+29   \};
+\end{DoxyCode}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244}{}\label{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Grid\+Transfer\+Type@{Grid\+Transfer\+Type}}
+\index{Grid\+Transfer\+Type@{Grid\+Transfer\+Type}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Grid\+Transfer\+Type}{GridTransferType}}
+{\footnotesize\ttfamily enum \hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Grid\+Transfer\+Type}}
+
+\begin{DoxyEnumFields}{Nilai enumerasi}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Half@{k\+Half}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Half@{k\+Half}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244a4d379724e5d895336a8ef3fc05b9c0f1}{}\label{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244a4d379724e5d895336a8ef3fc05b9c0f1} 
+k\+Half&Half weighting. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Full@{k\+Full}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Full@{k\+Full}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244afd0434b0061c5f056bc52c974ab97c45}{}\label{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244afd0434b0061c5f056bc52c974ab97c45} 
+k\+Full&Full weighting. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definisi pada baris 32 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+\begin{DoxyCode}
+32                         \{
+33     \hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244a4d379724e5d895336a8ef3fc05b9c0f1}{kHalf} = 0, 
+34     \hyperlink{classPoissonSolver3DCylindricalGPU_a7c0e6e2afb797759e24d961e30562244afd0434b0061c5f056bc52c974ab97c45}{kFull} = 1, 
+35   \};
+\end{DoxyCode}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07a}{}\label{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07a} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Interp\+Type@{Interp\+Type}}
+\index{Interp\+Type@{Interp\+Type}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Interp\+Type}{InterpType}}
+{\footnotesize\ttfamily enum \hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07a}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Interp\+Type}}
+
+\begin{DoxyEnumFields}{Nilai enumerasi}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Half\+Interp@{k\+Half\+Interp}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Half\+Interp@{k\+Half\+Interp}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa697ed9274ff84e68a071627f249dd298}{}\label{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa697ed9274ff84e68a071627f249dd298} 
+k\+Half\+Interp&Half bi linear interpolation. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Full\+Interp@{k\+Full\+Interp}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Full\+Interp@{k\+Full\+Interp}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa150731880e4a55bbd718c6c18d579719}{}\label{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa150731880e4a55bbd718c6c18d579719} 
+k\+Full\+Interp&Full bi linear interpolation. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definisi pada baris 45 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+\begin{DoxyCode}
+45                   \{
+46     \hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa697ed9274ff84e68a071627f249dd298}{kHalfInterp} = 0,    
+47     \hyperlink{classPoissonSolver3DCylindricalGPU_a8ef2ee39d1bfa64bc4724349f4a4e07aa150731880e4a55bbd718c6c18d579719}{kFullInterp} = 1    
+48   \};
+\end{DoxyCode}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499}{}\label{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Relax\+Type@{Relax\+Type}}
+\index{Relax\+Type@{Relax\+Type}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Relax\+Type}{RelaxType}}
+{\footnotesize\ttfamily enum \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Relax\+Type}}
+
+\begin{DoxyEnumFields}{Nilai enumerasi}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Jacobi@{k\+Jacobi}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Jacobi@{k\+Jacobi}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499ac8aa88956983b837547940c043acc338}{}\label{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499ac8aa88956983b837547940c043acc338} 
+k\+Jacobi&Jacobi (5 Stencil 2D, 7 Stencil 3\+D\+\_\+. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Weighted\+Jacobi@{k\+Weighted\+Jacobi}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Weighted\+Jacobi@{k\+Weighted\+Jacobi}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a6cfc0a8bf688cea321bfb31bc5ffb5f6}{}\label{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a6cfc0a8bf688cea321bfb31bc5ffb5f6} 
+k\+Weighted\+Jacobi&(T\+O\+DO) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Gauss\+Seidel@{k\+Gauss\+Seidel}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Gauss\+Seidel@{k\+Gauss\+Seidel}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a4e13ece57b52474aadbfdf204f624e80}{}\label{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a4e13ece57b52474aadbfdf204f624e80} 
+k\+Gauss\+Seidel&Gauss Seidel 2D (2 Color, 5 Stencil), 3D (7 Stencil) \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definisi pada baris 38 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+\begin{DoxyCode}
+38                  \{
+39     \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499ac8aa88956983b837547940c043acc338}{kJacobi} = 0,      
+40     \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a6cfc0a8bf688cea321bfb31bc5ffb5f6}{kWeightedJacobi} = 1, 
+41     \hyperlink{classPoissonSolver3DCylindricalGPU_a2477dcc6ced1975ec64f20136f8b8499a4e13ece57b52474aadbfdf204f624e80}{kGaussSeidel} = 2  
+42   \};
+\end{DoxyCode}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{}\label{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Strategy\+Type@{Strategy\+Type}}
+\index{Strategy\+Type@{Strategy\+Type}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Strategy\+Type}{StrategyType}}
+{\footnotesize\ttfamily enum \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Strategy\+Type}}
+
+
+
+$<$ Enumeration of Poisson Solver Strategy Type 
+
+\begin{DoxyEnumFields}{Nilai enumerasi}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Relaxation@{k\+Relaxation}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Relaxation@{k\+Relaxation}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180af52763d2ca25e946b8aedc135297512c}{}\label{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180af52763d2ca25e946b8aedc135297512c} 
+k\+Relaxation&S.\+O.\+R Cascaded Multi\+Grid. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Multi\+Grid@{k\+Multi\+Grid}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Multi\+Grid@{k\+Multi\+Grid}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab4c32d8aac8f42c5486b5f94649d64a4}{}\label{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab4c32d8aac8f42c5486b5f94649d64a4} 
+k\+Multi\+Grid&Geometric MG. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Fast\+Relaxation@{k\+Fast\+Relaxation}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!k\+Fast\+Relaxation@{k\+Fast\+Relaxation}}}\hypertarget{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab7013b3a2eeeccf764d8df057642a493}{}\label{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab7013b3a2eeeccf764d8df057642a493} 
+k\+Fast\+Relaxation&Spectral (T\+O\+DO) \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definisi pada baris 18 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+\begin{DoxyCode}
+18                     \{
+19     \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180af52763d2ca25e946b8aedc135297512c}{kRelaxation} = 0, 
+20     \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab4c32d8aac8f42c5486b5f94649d64a4}{kMultiGrid} = 1,  
+21     \hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab7013b3a2eeeccf764d8df057642a493}{kFastRelaxation} = 2       
+22   \};
+\end{DoxyCode}
+
+
+\subsection{Dokumentasi Konstruktor \& Destruktor}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a3c4108b642189cca05ad6715fde97457}{}\label{classPoissonSolver3DCylindricalGPU_a3c4108b642189cca05ad6715fde97457} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U()}{PoissonSolver3DCylindricalGPU()}}
+{\footnotesize\ttfamily Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Poisson\+Solver3\+D\+Cylindrical\+G\+PU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+constructor 
+
+Definisi pada baris 48 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+cxx.
+
+
+\begin{DoxyCode}
+48                                                              \{
+49 
+50     fErrorConvF = \textcolor{keyword}{new} \textcolor{keywordtype}{float} [\hyperlink{classPoissonSolver3DCylindricalGPU_a0d5484e574537bc26978992b88573517}{fMgParameters}.\hyperlink{structPoissonSolver3DCylindricalGPU_1_1MGParameters_ab8c83ba4715a4bd71b30a27a07b87be9}{nMGCycle}];
+51     fErrorExactF = \textcolor{keyword}{new} \textcolor{keywordtype}{float} [\hyperlink{classPoissonSolver3DCylindricalGPU_a0d5484e574537bc26978992b88573517}{fMgParameters}.\hyperlink{structPoissonSolver3DCylindricalGPU_1_1MGParameters_ab8c83ba4715a4bd71b30a27a07b87be9}{nMGCycle}];
+52 
+53 \}
+\end{DoxyCode}
+
+
+\subsection{Dokumentasi Anggota\+: Fungsi}
+\hypertarget{classPoissonSolver3DCylindricalGPU_aa95de949f9cb368eb0c9ee1b8d990a7f}{}\label{classPoissonSolver3DCylindricalGPU_aa95de949f9cb368eb0c9ee1b8d990a7f} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Poisson\+Solver3D@{Poisson\+Solver3D}}
+\index{Poisson\+Solver3D@{Poisson\+Solver3D}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Poisson\+Solver3\+D()}{PoissonSolver3D()}}
+{\footnotesize\ttfamily void Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Poisson\+Solver3D (\begin{DoxyParamCaption}\item[{float $\ast$}]{matricesV,  }\item[{float $\ast$}]{matrices\+Charge,  }\item[{int}]{n\+R\+Row,  }\item[{int}]{n\+Z\+Column,  }\item[{int}]{phi\+Slice,  }\item[{int}]{max\+Iteration,  }\item[{int}]{symmetry }\end{DoxyParamCaption})}
+
+Menyediakan solusi iteratif terhadap poisson solver pada koordinat silindrikal 3D
+
+Disediakan algoritma iteratif
+\begin{DoxyItemize}
+\item Geometric Multi\+Grid
+\begin{DoxyItemize}
+\item Cycles\+: V, W, Full
+\item Relaxation\+: Gauss-\/\+Seidel
+\item Grid transfer operators\+: Full, Half
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameter}
+{\em matricesV} & float $\ast$ potential dalam array 1D berukuran n\+R\+Row$\ast$n\+Z\+Column $\ast$phi\+Slice \\
+\hline
+{\em matrices\+Charge} & float $\ast$ charge dalam array 1D berukuran n\+R\+Row$\ast$n\+Z\+Column $\ast$phi\+Slice \\
+\hline
+{\em n\+R\+Row} & int jumlah titik grid pada arah radial \\
+\hline
+{\em n\+Z\+Column} & int jumlah titik grid pada arah z \\
+\hline
+{\em phi\+Slice} & int jumlah titik grid pada arah sudut (phi) \\
+\hline
+{\em max\+Iteration} & int jumlah iterasi maksimum pada multigrud \\
+\hline
+{\em symmetry} & int nilai simetri (tidak dipakai) \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 85 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+cxx.
+
+
+\begin{DoxyCode}
+87                                                         \{
+88 
+89   fNRRow = nRRow;
+90   fNZColumn = nZColumn;
+91   fPhiSlice = phiSlice;
+92 
+93   PoissonMultiGrid3D2D(matricesV, matricesCharge, nRRow, nZColumn, phiSlice, symmetry);
+94   
+95 
+96 \}
+\end{DoxyCode}
+\hypertarget{classPoissonSolver3DCylindricalGPU_af269b7d4472ee9681f9d372373f1e7f8}{}\label{classPoissonSolver3DCylindricalGPU_af269b7d4472ee9681f9d372373f1e7f8} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!Set\+Exact\+Solution@{Set\+Exact\+Solution}}
+\index{Set\+Exact\+Solution@{Set\+Exact\+Solution}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{Set\+Exact\+Solution()}{SetExactSolution()}}
+{\footnotesize\ttfamily void Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::\+Set\+Exact\+Solution (\begin{DoxyParamCaption}\item[{float $\ast$}]{exact\+Solution,  }\item[{int}]{n\+R\+Row,  }\item[{int}]{n\+Z\+Column,  }\item[{int}]{phi\+Slice }\end{DoxyParamCaption})}
+
+Helper untuk menset nilai V dari fungsi analitik (diperlukan untuk memastikan implementasi benar 
+\begin{DoxyParams}{Parameter}
+{\em exact\+Solution} & float $\ast$ array 1D sebesar n\+R\+Row $\ast$ n\+Z\+Column $\ast$ phi\+Slice\\
+\hline
+{\em n\+R\+Row} & int jumlah titik grid pada arah radial \\
+\hline
+{\em n\+Z\+Column} & int jumlah titik grid pada arah z \\
+\hline
+{\em phi\+Slice} & int jumlah titik grid pada arah sudut (phi) \\
+\hline
+\end{DoxyParams}
+
+
+Definisi pada baris 177 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+cxx.
+
+
+\begin{DoxyCode}
+177                                                                                                            
+         \{
+178     fNRRow = nRRow;
+179     fNZColumn = nZColumn;
+180     fPhiSlice = phiSlice;
+181     fExactSolutionF = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[fNRRow * fPhiSlice * fNZColumn];
+182     fExactPresent = \textcolor{keyword}{true};
+183     fMaxExact = 0.0;;
+184     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<nRRow*nZColumn*phiSlice;i++) \{
+185         fExactSolutionF[i] = exactSolution[i];
+186         \textcolor{keywordflow}{if} (abs(fExactSolutionF[i]) > fMaxExact) fMaxExact = abs(fExactSolutionF[i]); 
+187     \}
+188 \}
+\end{DoxyCode}
+
+
+\subsection{Dokumentasi Anggota\+: Data}
+\hypertarget{classPoissonSolver3DCylindricalGPU_a6688ba03a837d4919001cd0aa14ef80e}{}\label{classPoissonSolver3DCylindricalGPU_a6688ba03a837d4919001cd0aa14ef80e} 
+\index{Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}!fgk\+I\+F\+C\+Radius@{fgk\+I\+F\+C\+Radius}}
+\index{fgk\+I\+F\+C\+Radius@{fgk\+I\+F\+C\+Radius}!Poisson\+Solver3\+D\+Cylindrical\+G\+PU@{Poisson\+Solver3\+D\+Cylindrical\+G\+PU}}
+\subsubsection{\texorpdfstring{fgk\+I\+F\+C\+Radius}{fgkIFCRadius}}
+{\footnotesize\ttfamily const float Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U\+::fgk\+I\+F\+C\+Radius = 83.\+5\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Mean Radius of the Inner Field Cage ( 82.\+43 min, 83.\+70 max) (cm) 
+
+radius which renders the \char`\"{}18 rod manifold\char`\"{} best -\/$>$ compare calc. of Jim Thomas 
+
+Definisi pada baris 80 dalam file Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h.
+
+
+
+Dokumentasi untuk kelas ini dibangkitkan dari file-\/file berikut\+:\begin{DoxyCompactItemize}
+\item 
+/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/interface/\hyperlink{PoissonSolver3DCylindricalGPU_8h}{Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h}\item 
+/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/interface/Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+cxx\end{DoxyCompactItemize}

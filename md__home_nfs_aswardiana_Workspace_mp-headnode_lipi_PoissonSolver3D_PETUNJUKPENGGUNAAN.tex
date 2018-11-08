@@ -1,0 +1,338 @@
+
+\begin{DoxyCode}
+pembuat : Rifki Sadikin (rifki.sadikin@lipi.go.id)
+tanggal : 6 November 2018
+\end{DoxyCode}
+
+
+Petunjuk penggunaan ini berisi\+:
+
+
+\begin{DoxyItemize}
+\item Cara {\bfseries membuat} dan {\bfseries menginstal} Pustaka Pemercepat Komputasi berbasis G\+PU C\+U\+DA untuk Penyelesaian Persamaan {\itshape Poisson} dalam Koordinat Silindrikal.
+\item Cara {\bfseries memakai} Pustaka Pemercepat Komputasi berbasis G\+PU C\+U\+DA untuk Penyelesaian Persamaan {\itshape Poisson} dalam Koordinat Silindrikal dalam C++.
+\end{DoxyItemize}
+
+\subsection*{Struktur Berkas}
+
+Struktur berkas pustaka Pemercepat Komputasi berbasis G\+PU C\+U\+DA untuk Penyelesaian Persamaan {\itshape Poisson} dalam Koordinat Silindrikal adalah sebagai berikut\+:
+
+
+\begin{DoxyCode}
+|-- CMakeLists.txt
+|-- docs
+|   `-- Doxyfile.in
+|-- example
+|   |-- CMakeLists.txt
+|   |-- PoissonSolver3DGPUTest.cpp
+|   `-- PoissonSolver3DGPUTest.h
+|-- interface
+|   |-- PoissonSolver3DCylindricalGPU.cxx
+|   `-- PoissonSolver3DCylindricalGPU.h
+|-- kernel
+|   |-- PoissonSolver3DGPU.cu
+|   `-- PoissonSolver3DGPU.h
+|-- PETUNJUKPENGGUNAAN.md
+`-- README.md
+\end{DoxyCode}
+ \subsection*{Modul Program yang Dibutuhkan}
+
+Untuk menginstall pustaka dibutuhkan program pengembang di lingkungan sistem operasi Linux (saat ini masih di Linux) yaitu\+:
+
+
+\begin{DoxyEnumerate}
+\item C\+M\+A\+KE versi minimal 3.\+10.\+3
+\item G\+CC versi minimal 6.\+2.\+0
+\item C\+U\+DA versi minimal 8.\+0
+\item G\+IT versi minimal 1.\+8.\+3.\+1
+\end{DoxyEnumerate}
+
+Jika disediakan module program pada lingkungan sistem H\+PC maka dapat menjalankan perintah berikut ini\+:
+
+
+\begin{DoxyCode}
+module load cmake/3.10.3
+module load gcc/6.2.0
+module load cuda
+\end{DoxyCode}
+ \subsection*{Instalasi}
+
+Untuk menginstall pustaka Poisson\+Solver3D lakukan langkah-\/langkah berikut\+:
+
+
+\begin{DoxyEnumerate}
+\item Jalankan git clone untuk menyalin kode sumber ke direktori local. Perintah ini akan menyalin kode sumber ke direktori {\bfseries Poisson\+Solver3D} 
+\begin{DoxyCode}
+$ git clone http://github.com/rsadikin/PoissonSolver3D.git
+\end{DoxyCode}
+
+\item Pindah ke direktori Poisson\+Solver3D, dan lihat daftar direktori 
+\begin{DoxyCode}
+$ cd PoissonSolver3D
+$ tree .
+.
+|-- CMakeLists.txt
+|-- docs
+|   `-- Doxyfile.in
+|-- example
+|   |-- CMakeLists.txt
+|   |-- PoissonSolver3DGPUTest.cpp
+|   `-- PoissonSolver3DGPUTest.h
+|-- interface
+|   |-- PoissonSolver3DCylindricalGPU.cxx
+|   `-- PoissonSolver3DCylindricalGPU.h
+|-- kernel
+|   |-- PoissonSolver3DGPU.cu
+|   `-- PoissonSolver3DGPU.h
+|-- PETUNJUKPENGGUNAAN.md
+`-- README.md
+\end{DoxyCode}
+
+\item Buatlah folder {\bfseries buildpoissonsolver} di luar direktori kode sumber 
+\begin{DoxyCode}
+$ mkdir $HOME/buildpoissonsolver
+\end{DoxyCode}
+
+\item Pindah ke folder {\bfseries buildpoissonsolver}
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+$ cd $HOME/buildpoissonsolver
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item Jalankan {\bfseries cmake} di folder {\bfseries buildpoissonsolver} dengan menyatakan di mana pustaka akan diinstal dengan perintah sebagai berikut 
+\begin{DoxyCode}
+$ export  PSLIB=/home/usertest/trypoissonsolver/PoissonSolver3D
+$ export PSLIB\_INSTALL=/home/usertest/buildpoissonsolver
+$ cmake $PSLIB/ -DCMAKE\_INSTALL\_PREFIX=$PSLIB\_INSTALL
+-- The C compiler identification is GNU 6.2.0
+-- The CXX compiler identification is GNU 6.2.0
+-- Check for working C compiler: /apps/tools/gcc-6.2.0/bin/gcc
+-- Check for working C compiler: /apps/tools/gcc-6.2.0/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /apps/tools/gcc-6.2.0/bin/c++
+-- Check for working CXX compiler: /apps/tools/gcc-6.2.0/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for pthread\_create
+-- Looking for pthread\_create - not found
+-- Looking for pthread\_create in pthreads
+-- Looking for pthread\_create in pthreads - not found
+-- Looking for pthread\_create in pthread
+-- Looking for pthread\_create in pthread - found
+-- Found Threads: TRUE
+-- Found CUDA: /apps/tools/cuda-9.1 (found version "9.1")
+-- Building SpaceCharge distortion framework with CUDA support
+-- Found Doxygen: /usr/bin/doxygen (found version "1.8.5") found components:  doxygen dot
+Doxygen build started
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/usertest/buildpoissonsolver
+\end{DoxyCode}
+
+\item Kompail kode sumbernya 
+\begin{DoxyCode}
+$ make
+\end{DoxyCode}
+
+\item Install modul Poisson\+Solver3D di folder {\bfseries buildpoissonsolver} 
+\begin{DoxyCode}
+$ make install
+..
+-- Install configuration: ""
+-- Installing: /home/usertest/trypoissonsolver/buildpoissonsolver/lib/libPoissonSolver3DCylindricalGPU.so
+-- Installing: /home/usertest/trypoissonsolver/buildpoissonsolver/include/PoissonSolver3DCylindricalGPU.h
+-- Installing: /home/usertest/trypoissonsolver/buildpoissonsolver/include/PoissonSolver3DGPU.h
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+Hasil instalasi adalah sebuah pustaka yang dapat digunakan ({\bfseries shared library}) yaitu lib\+Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+so pada direktori {\bfseries lib} dan 2 berkas header yang mengandung definisi kelas /fungsi sehingga pengguna pustaka dapat menggunakannya.
+
+\subsection*{Penggunaan Pustaka}
+
+\subsubsection*{Penggunaan Dalam C\+M\+A\+KE}
+
+Dalam folder {\bfseries example} di struktur direktori sumber terdapat contoh penggunaan pustaka libpoissonsolvergpu.\+so dengan menggunakan {\bfseries cmake}. Berikut ini langkah-\/langkahnya\+:
+
+
+\begin{DoxyEnumerate}
+\item Buat file {\bfseries C\+Make\+Lists.\+txt} dengan struktur sebagai berikut untuk menambahkan pustaka cuda ({\bfseries libcuda.\+so}) dan pustaka \hyperlink{classPoissonSolver3DCylindricalGPU}{Poisson\+Solver3\+D\+Cylindrical\+G\+PU} ({\bfseries lib\+Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+so}) pada proyek cmake\+:
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+cmake\_minimum\_required (VERSION 2.8.11)
+project (3DPoissonSolverGPUTest)
+
+find\_package(CUDA)
+if(NOT CUDA\_FOUND)
+    message( FATAL\_ERROR "NVIDIA CUDA package not found" )
+else()
+    find\_library(LIBCUDA\_SO\_PATH libcuda.so)
+    string(FIND $\{LIBCUDA\_SO\_PATH\} "-NOTFOUND" LIBCUDA\_SO\_PATH\_NOTFOUND )
+endif(NOT CUDA\_FOUND)
+message( STATUS "Building Poisson Solver  with CUDA support" )
+
+if(LIBCUDA\_SO\_PATH\_NOTFOUND GREATER -1)
+  message( FATAL\_ERROR "NVIDIA CUDA libcuda.so not found" )
+endif(LIBCUDA\_SO\_PATH\_NOTFOUND GREATER -1)
+
+
+#set(CMAKE\_MODULE\_PATH "$\{CMAKE\_SOURCE\_DIR\}/CMake/cuda" $\{CMAKE\_MODULE\_PATH\})
+#find\_package(CUDA QUIET REQUIRED)
+set(PSLIBNAME libPoissonSolver3DCylindricalGPU.so)
+
+find\_library(PSLIB $\{PSLIBNAME\})
+string(FIND $\{PSLIB\} "-NOTFOUND" PSLIB\_NOTFOUND )
+
+if(PSLIB\_NOTFOUND GREATER -1)
+  message( FATAL\_ERROR "Poisson Solver Cuda Library libPoissonSolver3DCylindricalGPU.o not found" )
+endif(PSLIB\_NOTFOUND GREATER -1)
+\end{DoxyCode}
+ Setelah itu, baru tambahkan perintah pada C\+Make\+Lists.\+txt (dilanjutkan) untuk mengikut sertakan kode sumber user yaitu\+:
+
+
+\begin{DoxyCode}
+# tambah disini kode sumber user
+set(CPP\_SOURCE PoissonSolver3DGPUTest.cpp)
+set(HEADERS PoissonSolver3DGPUTest.h)
+
+set(TARGET\_NAME poissonsolvergputest)
+
+add\_executable($\{TARGET\_NAME\}
+  PoissonSolver3DGPUTest.cpp
+)
+
+
+# ikut sertakan shared library cuda dan poisson solver
+target\_link\_libraries($\{TARGET\_NAME\} $\{PSLIB\} $\{LIBCUDA\_SO\_PATH\})
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item Pada kode sumber include header file sehingga definisi fungsi dan kelas dapat dipanggil di badan kode.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+\{c++\}
+#include "PoissonSolver3DCylindricalGPU.h"
+
+...
+// create poissonSolver
+PoissonSolver3DCylindricalGPU *poissonSolver = new PoissonSolver3DCylindricalGPU();
+PoissonSolver3DCylindricalGPU::fgConvergenceError = 1e-8;
+poissonSolver->SetExactSolution(VPotentialExact,kRows,kColumns, kPhiSlices);
+poissonSolver->SetStrategy(PoissonSolver3DCylindricalGPU::kMultiGrid);
+poissonSolver->SetCycleType(PoissonSolver3DCylindricalGPU::kFCycle);
+poissonSolver->PoissonSolver3D(VPotential,RhoCharge,kRows,kColumns,kPhiSlices, kIterations,kSymmetry) ;
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item Buat folder terpisah untuk mebangun proyek yang menggunakan pustaka misal {\bfseries buildexamplepoissonsolver} lalu jalankan {\bfseries cmake} dengan flag spesial yaitu $\ast$$\ast$-\/\+D\+C\+M\+A\+K\+E\+\_\+\+P\+R\+E\+F\+I\+X\+\_\+\+P\+A\+T\+H$\ast$$\ast$ yang ditetapkan dengan absolute path tempat direktori \hyperlink{classPoissonSolver3DCylindricalGPU}{Poisson\+Solver3\+D\+Cylindrical\+G\+PU} dibangun.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+$ mkdir buildexamplepoissonsolver
+$ cd buildexamplepoissonsolver
+$ cmake ../PoissonSolver3D/example/ -DCMAKE\_PREFIX\_PATH=/home/usertest/trypoissonsolver/buildpoissonsolver
+...
+-- Found CUDA: /apps/tools/cuda-9.1 (found version "9.1")
+-- Building Poisson Solver  with CUDA support
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/usertest/trypoissonsolver/buildexamplepoissonsolver
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item Jalankan {\bfseries make} untuk membuat {\itshape executable file}
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+$ make
+
+-- Building Poisson Solver  with CUDA support
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/usertest/trypoissonsolver/buildexamplepoissonsolver
+[ 50%] Linking CXX executable poissonsolvergputest
+[100%] Built target poissonsolvergputest
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item Hasil dari {\bfseries make} adalah program yang dapat dieksekusi yang berjalan di G\+PU card 
+\begin{DoxyCode}
+$ ./poissonsolvergputest
+Poisson Solver 3D Cylindrical GPU test
+Ukuran grid (r,phi,z) = (17,17,18)
+Waktu komputasi:            0.55 s
+Jumlah iterasi siklus multigrid:    5
+Iterasi Error Convergen     Error Absolut
+[0]:    8.362587e-01    2.430797e-03
+[1]:    5.126660e-02    4.434380e-04
+[2]:    9.490424e-03    1.892288e-04
+[3]:    2.084086e-03    1.314385e-04
+[4]:    1.141812e-03    1.217592e-04
+
+Poisson Solver 3D Cylindrical GPU test
+Ukuran grid (r,phi,z) = (33,33,36)
+Waktu komputasi:            1.000000e-02 s
+Jumlah iterasi siklus multigrid:    10
+Iterasi Error Convergen     Error Absolut
+[0]:    1.724319e-03    1.315177e-04
+[1]:    8.652242e-05    1.266415e-04
+[2]:    5.450314e-05    1.256187e-04
+[3]:    5.081671e-05    1.249848e-04
+[4]:    4.951065e-05    1.244460e-04
+[5]:    4.904093e-05    1.241379e-04
+[6]:    4.890266e-05    1.239894e-04
+[7]:    4.885175e-05    1.239208e-04
+[8]:    4.883604e-05    1.238959e-04
+[9]:    4.883501e-05    1.238844e-04
+
+Poisson Solver 3D Cylindrical GPU test
+Ukuran grid (r,phi,z) = (65,65,72)
+Waktu komputasi:            5.000000e-02 s
+Jumlah iterasi siklus multigrid:    3
+Iterasi Error Convergen     Error Absolut
+[0]:    1.084726e-04    1.291784e-04
+[1]:    5.680057e-06    1.283386e-04
+[2]:    1.501479e-06    1.278558e-04
+
+Poisson Solver 3D Cylindrical GPU test
+Ukuran grid (r,phi,z) = (129,129,144)
+Waktu komputasi:            1.200000e-01 s
+Jumlah iterasi siklus multigrid:    3
+Iterasi Error Convergen     Error Absolut
+[0]:    1.373293e-05    1.302576e-04
+[1]:    2.154564e-06    1.299626e-04
+[2]:    1.048384e-06    1.297261e-04
+
+Poisson Solver 3D Cylindrical GPU test
+Ukuran grid (r,phi,z) = (257,257,288)
+Waktu komputasi:            6.900000e-01 s
+Jumlah iterasi siklus multigrid:    5
+Iterasi Error Convergen     Error Absolut
+[0]:    5.469890e-06    1.388922e-04
+[1]:    1.783695e-06    1.384964e-04
+[2]:    1.345343e-06    1.381199e-04
+[3]:    1.156555e-06    1.377524e-04
+[4]:    1.050234e-06    1.373983e-04
+\end{DoxyCode}
+ 
+\end{DoxyEnumerate}

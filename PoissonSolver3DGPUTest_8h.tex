@@ -1,0 +1,193 @@
+\hypertarget{PoissonSolver3DGPUTest_8h}{}\section{Referensi File /home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/example/\+Poisson\+Solver3\+D\+G\+P\+U\+Test.h}
+\label{PoissonSolver3DGPUTest_8h}\index{/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/example/\+Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h@{/home/nfs/aswardiana/\+Workspace/mp-\/headnode/lipi/\+Poisson\+Solver3\+D/example/\+Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h}}
+
+
+Berkas ini berisi definisi fungs untuk memakai pustaka lib\+Poisson\+Solver3\+D\+Cylindrial\+G\+P\+U.\+so.  
+
+
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include \char`\"{}Poisson\+Solver3\+D\+Cylindrical\+G\+P\+U.\+h\char`\"{}}\newline
+\subsection*{Fungsi}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{PoissonSolver3DGPUTest_8h_a30546d35a57d5a2f24e60329d429299d}{Do\+Poisson\+Solver\+Experiment} (const int k\+Rows, const int k\+Columns, const int k\+Phi\+Slices, const int k\+Iterations, const int k\+Symmetry)
+\begin{DoxyCompactList}\small\item\em Lakukan eksperimen poisson solver. \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a437e9d0b3229da80c9e879089635279c}{}\label{PoissonSolver3DGPUTest_8h_a437e9d0b3229da80c9e879089635279c} 
+void \hyperlink{PoissonSolver3DGPUTest_8h_a437e9d0b3229da80c9e879089635279c}{Init\+Voltand\+Charge3D} (float $\ast$V\+Potential\+Exact, float $\ast$V\+Potential, float $\ast$Rho\+Charge, const int k\+Rows, const int k\+Columns, const int k\+Phi\+Slices, float grid\+SizeR, float grid\+SizeZ, float grid\+Size\+Phi)
+\begin{DoxyCompactList}\small\item\em Inisisasi nilai volt dan charge. \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a50a763900eedd442f19425214d286b8c}{}\label{PoissonSolver3DGPUTest_8h_a50a763900eedd442f19425214d286b8c} 
+float \hyperlink{PoissonSolver3DGPUTest_8h_a50a763900eedd442f19425214d286b8c}{Test\+Function1\+Potential\+Eval} (double a, double b, double c, float radius0, float phi0, float z0)
+\begin{DoxyCompactList}\small\item\em analytic function untuk potensial \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a6f2588df3a7e764ddf6269f6211129bb}{}\label{PoissonSolver3DGPUTest_8h_a6f2588df3a7e764ddf6269f6211129bb} 
+float \hyperlink{PoissonSolver3DGPUTest_8h_a6f2588df3a7e764ddf6269f6211129bb}{Test\+Function1\+Charge\+Eval} (double a, double b, double c, float radius0, float phi0, float z0)
+\begin{DoxyCompactList}\small\item\em analytic function untuk charge \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variabel}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_af87e923658bfa42131c5a45683d589d6}{}\label{PoissonSolver3DGPUTest_8h_af87e923658bfa42131c5a45683d589d6} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_af87e923658bfa42131c5a45683d589d6}{fgk\+T\+P\+C\+Z0} = 249.\+7
+\begin{DoxyCompactList}\small\item\em nominal gating grid position \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a08e58a9afb68f92938cbf045fa1f430f}{}\label{PoissonSolver3DGPUTest_8h_a08e58a9afb68f92938cbf045fa1f430f} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_a08e58a9afb68f92938cbf045fa1f430f}{fgk\+I\+F\+C\+Radius} = 83.\+5
+\begin{DoxyCompactList}\small\item\em radius which renders the \char`\"{}18 rod manifold\char`\"{} best -\/$>$ compare calc. of Jim Thomas \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_ad1e5712f922bb8ff6d9f8076d0260d08}{}\label{PoissonSolver3DGPUTest_8h_ad1e5712f922bb8ff6d9f8076d0260d08} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_ad1e5712f922bb8ff6d9f8076d0260d08}{fgk\+O\+F\+C\+Radius} = 254.\+5
+\begin{DoxyCompactList}\small\item\em Mean Radius of the Outer Field Cage (252.\+55 min, 256.\+45 max) (cm) \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a0a67d5d92b8476b951fb4d3aff26bcce}{}\label{PoissonSolver3DGPUTest_8h_a0a67d5d92b8476b951fb4d3aff26bcce} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_a0a67d5d92b8476b951fb4d3aff26bcce}{fgk\+Z\+Off\+Set} = 0.\+2
+\begin{DoxyCompactList}\small\item\em Offset from CE\+: calculate all distortions closer to CE as if at this point. \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a8d5346b06a8cf71db1482664947de55f}{}\label{PoissonSolver3DGPUTest_8h_a8d5346b06a8cf71db1482664947de55f} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_a8d5346b06a8cf71db1482664947de55f}{fgk\+CathodeV} = -\/100000.\+0
+\begin{DoxyCompactList}\small\item\em Cathode Voltage (volts) \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_ae0f2d0e814a253cd9d1a80fc0711a510}{}\label{PoissonSolver3DGPUTest_8h_ae0f2d0e814a253cd9d1a80fc0711a510} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_ae0f2d0e814a253cd9d1a80fc0711a510}{fgk\+GG} = -\/70.\+0
+\begin{DoxyCompactList}\small\item\em Gating Grid voltage (volts) \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_a7fd0aa49a25dc4ca40fa446e79593363}{}\label{PoissonSolver3DGPUTest_8h_a7fd0aa49a25dc4ca40fa446e79593363} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_a7fd0aa49a25dc4ca40fa446e79593363}{fgkdvdE} = 0.\+0024
+\begin{DoxyCompactList}\small\item\em \mbox{[}cm/V\mbox{]} drift velocity dependency on the E field (from Magboltz for Ne\+C\+O2\+N2 at standard environment) \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_aec548eac7cd227d7dcebf4996fac4ab2}{}\label{PoissonSolver3DGPUTest_8h_aec548eac7cd227d7dcebf4996fac4ab2} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_aec548eac7cd227d7dcebf4996fac4ab2}{fgk\+EM} = -\/1.\+602176487e-\/19 / 9.\+10938215e-\/31
+\begin{DoxyCompactList}\small\item\em charge/mass in \mbox{[}C/kg\mbox{]} \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_aa4292ca0dc1efadf8cec3d0cf4ca7033}{}\label{PoissonSolver3DGPUTest_8h_aa4292ca0dc1efadf8cec3d0cf4ca7033} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_aa4292ca0dc1efadf8cec3d0cf4ca7033}{fgke0} = 8.\+854187817e-\/12
+\begin{DoxyCompactList}\small\item\em vacuum permittivity \mbox{[}A·s/(V·m)\mbox{]} \end{DoxyCompactList}\item 
+\hypertarget{PoissonSolver3DGPUTest_8h_af0561293054ed6d93e2935598cb146a7}{}\label{PoissonSolver3DGPUTest_8h_af0561293054ed6d93e2935598cb146a7} 
+const double \hyperlink{PoissonSolver3DGPUTest_8h_af0561293054ed6d93e2935598cb146a7}{fg\+Convergence\+Error} = 1e-\/6
+\begin{DoxyCompactList}\small\item\em vacuum permittivity \mbox{[}A·s/(V·m)\mbox{]} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Keterangan Lengkap}
+Berkas ini berisi definisi fungs untuk memakai pustaka lib\+Poisson\+Solver3\+D\+Cylindrial\+G\+P\+U.\+so. 
+
+\begin{DoxyAuthor}{Penulis}
+Rifki Sadikin \href{mailto:rifki.sadikin@lipi.go.id}{\tt rifki.\+sadikin@lipi.\+go.\+id}, Pusat Penelitian Informatika, Lembaga Ilmu Pengetahuan Indonesia 
+
+I Wayan Aditya Swardiana \href{mailto:i.wayan.aditya.swardiana@lipi.go.id}{\tt i.\+wayan.\+aditya.\+swardiana@lipi.\+go.\+id}, Pusat Penelitian Informatika, Lembaga Ilmu Pengetahuan Indonesia 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Tanggal}
+November 8, 2018 
+\end{DoxyDate}
+
+
+\subsection{Dokumentasi Fungsi}
+\hypertarget{PoissonSolver3DGPUTest_8h_a30546d35a57d5a2f24e60329d429299d}{}\label{PoissonSolver3DGPUTest_8h_a30546d35a57d5a2f24e60329d429299d} 
+\index{Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h@{Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h}!Do\+Poisson\+Solver\+Experiment@{Do\+Poisson\+Solver\+Experiment}}
+\index{Do\+Poisson\+Solver\+Experiment@{Do\+Poisson\+Solver\+Experiment}!Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h@{Poisson\+Solver3\+D\+G\+P\+U\+Test.\+h}}
+\subsubsection{\texorpdfstring{Do\+Poisson\+Solver\+Experiment()}{DoPoissonSolverExperiment()}}
+{\footnotesize\ttfamily void Do\+Poisson\+Solver\+Experiment (\begin{DoxyParamCaption}\item[{const int}]{k\+Rows,  }\item[{const int}]{k\+Columns,  }\item[{const int}]{k\+Phi\+Slices,  }\item[{const int}]{k\+Iterations,  }\item[{const int}]{k\+Symmetry }\end{DoxyParamCaption})}
+
+
+
+Lakukan eksperimen poisson solver. 
+
+\begin{DoxyVerb}const float  ratioPhi    =  gridSizeR*gridSizeR / (gridSizePhi*gridSizePhi) ;  // ratio_{phi} = gridsize_{r} / gridsize_{phi}
+const float  ratioZ      =  gridSizeR*gridSizeR / (gridSizeZ*gridSizeZ) ; // ratio_{Z} = gridsize_{r} / gridsize_{z}
+const float  convErr       =  fgConvergenceError;
+const float  IFCRadius   =  fgkIFCRadius;
+
+const int  fparamsize = 8;
+float * fparam = new float[fparamsize];
+
+fparam[0] = gridSizeR;
+fparam[1] = gridSizePhi;
+fparam[2] = gridSizeZ;
+fparam[3] = ratioPhi;
+fparam[4] = ratioZ;
+fparam[5] = convErr;
+fparam[6] = IFCRadius;
+
+int  iparamsize = 4;
+int  * iparam = new int[iparamsize];
+
+iparam[0] = 2;//nPre    
+iparam[1] = 2;//nPost;          
+iparam[2] = 6;//maxLoop;
+iparam[3] = 200; //nMGCycle;
+for (int k=0;k<kPhiSlices;k++) {
+for (int i=0;i<kRows;i++) {
+        for (int j=0;j< kColumns;j++) printf("%.3f\t",RhoCharge[k * (kRows * kColumns) + i * kColumns + j]);
+        printf("\n");
+}
+printf("\n");
+}
+\end{DoxyVerb}
+ V\+Cycle Poisson\+Multigrid3\+D\+Semi\+Coarsening\+G\+P\+U\+Error(\+V\+Potential, Rho\+Charge, k\+Rows, k\+Columns ,k\+Phi\+Slices, 0 , fparam, iparam, true, error\+Conv,error\+Exact, V\+Potential\+Exact); Call poisson solver
+
+for (int k=0;k$<$1;k++) \{ for (int i=0;i$<$k\+Rows;i++) \{ for (int j=0;j$<$ k\+Columns;j++) printf(\char`\"{}\%.\+3f\textbackslash{}t\char`\"{},V\+Potential\+Exact\mbox{[}k$\ast$ (k\+Rows $\ast$ k\+Columns) + i $\ast$ k\+Columns + j\mbox{]}); printf(\char`\"{}\textbackslash{}n\char`\"{}); \} printf(\char`\"{}\textbackslash{}n\char`\"{}); \}
+
+for (int k=0;k$<$1;k++) \{ for (int i=0;i$<$k\+Rows;i++) \{ for (int j=0;j$<$ k\+Columns;j++) printf(\char`\"{}\%.\+3f\textbackslash{}t\char`\"{},V\+Potential\mbox{[}k$\ast$ (k\+Rows $\ast$ k\+Columns) + i $\ast$ k\+Columns + j\mbox{]}); printf(\char`\"{}\textbackslash{}n\char`\"{}); \} printf(\char`\"{}\textbackslash{}n\char`\"{}); \} 
+
+Definisi pada baris 15 dalam file Poisson\+Solver3\+D\+G\+P\+U\+Test.\+cpp.
+
+
+\begin{DoxyCode}
+15                                                                                                            
+                                    \{
+16         
+17     
+18     \textcolor{keywordtype}{int} kPhiSlicesPerSector = kPhiSlices/18;
+19   
+20     \textcolor{keyword}{const} \textcolor{keywordtype}{float} gridSizeR   =  (\hyperlink{PoissonSolver3DGPUTest_8h_ad1e5712f922bb8ff6d9f8076d0260d08}{fgkOFCRadius}-\hyperlink{PoissonSolver3DGPUTest_8h_a08e58a9afb68f92938cbf045fa1f430f}{fgkIFCRadius}) / (kRows-1) ;
+21     \textcolor{keyword}{const} \textcolor{keywordtype}{float} gridSizeZ   =  \hyperlink{PoissonSolver3DGPUTest_8h_af87e923658bfa42131c5a45683d589d6}{fgkTPCZ0} / (kColumns-1) ;
+22     
+23     \textcolor{keyword}{const} \textcolor{keywordtype}{float} gridSizePhi =  (M\_PI * 2)/ ( 18.0 * kPhiSlicesPerSector);
+24 
+25     \textcolor{keywordtype}{int} size = kRows * kColumns * kPhiSlices;
+26 
+27     \textcolor{keywordtype}{float} * VPotential = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[size];
+28     \textcolor{keywordtype}{float} * VPotentialExact  = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[size];     
+29     \textcolor{keywordtype}{float} * RhoCharge  = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[size];   
+30     \textcolor{keywordtype}{float} * errorConv  = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[200];    
+31     \textcolor{keywordtype}{float} * errorExact  = \textcolor{keyword}{new} \textcolor{keywordtype}{float}[200];   
+32     
+33     \hyperlink{PoissonSolver3DGPUTest_8h_a437e9d0b3229da80c9e879089635279c}{InitVoltandCharge3D}(VPotentialExact,VPotential,RhoCharge,kRows,kColumns,kPhiSlices,
+      gridSizeR,gridSizeZ,gridSizePhi);
+34 
+35 
+82     \textcolor{comment}{// create poissonSolver}
+83     \hyperlink{classPoissonSolver3DCylindricalGPU}{PoissonSolver3DCylindricalGPU} *poissonSolver = \textcolor{keyword}{new} 
+      \hyperlink{classPoissonSolver3DCylindricalGPU}{PoissonSolver3DCylindricalGPU}();
+84     
+85     \hyperlink{classPoissonSolver3DCylindricalGPU_aa4ca52e88fafce30176d4cae5af7f6d9}{PoissonSolver3DCylindricalGPU::fgConvergenceError} = 1e
+      -6;
+86     \textcolor{comment}{// zeroring array of error}
+87     poissonSolver->SetExactSolution(VPotentialExact,kRows,kColumns, kPhiSlices);
+88     
+89     
+90     
+91     \textcolor{comment}{// Case 1. Set the strategy as multigrid, fullmultigrid, and full 3d}
+92     poissonSolver->SetStrategy(\hyperlink{classPoissonSolver3DCylindricalGPU_a5358c19436c2d27d2b917d070273e180ab4c32d8aac8f42c5486b5f94649d64a4}{PoissonSolver3DCylindricalGPU::kMultiGrid}
+      );   
+93     poissonSolver->SetCycleType(\hyperlink{classPoissonSolver3DCylindricalGPU_adb48f4d0173159081f19f859bb3c0ffca2bff33584c1562c46db72a65338942bf}{PoissonSolver3DCylindricalGPU::kFCycle}
+      );
+94 
+95     \textcolor{comment}{// TStopwatch w;}
+96     std::clock\_t start,stop;
+97     \textcolor{keywordtype}{double} duration;
+98 
+99         start = std::clock();
+100  
+101     \textcolor{comment}{//w.Start();}
+102     poissonSolver->\hyperlink{classPoissonSolver3DCylindricalGPU_aa95de949f9cb368eb0c9ee1b8d990a7f}{PoissonSolver3D}(VPotential,RhoCharge,kRows,kColumns,kPhiSlices, 
+      kIterations,kSymmetry) ;
+103     \textcolor{comment}{//w.Stop();}
+104     stop = std::clock();
+114         duration = ( stop - start ) / (\textcolor{keywordtype}{double}) CLOCKS\_PER\_SEC;
+115 
+116     std::cout<<\textcolor{stringliteral}{"Poisson Solver 3D Cylindrical GPU test"} << \textcolor{charliteral}{'\(\backslash\)n'};
+117     std::cout<<\textcolor{stringliteral}{"Ukuran grid (r,phi,z) = ("} << kRows << \textcolor{stringliteral}{","} << kColumns << \textcolor{stringliteral}{","} << kPhiSlices <<\textcolor{stringliteral}{") \(\backslash\)n"};
+118         std::cout<<\textcolor{stringliteral}{"Waktu komputasi: \(\backslash\)t\(\backslash\)t\(\backslash\)t"}<< duration <<\textcolor{stringliteral}{" s \(\backslash\)n"};
+119     std::cout<<\textcolor{stringliteral}{"Jumlah iterasi siklus multigrid: \(\backslash\)t"}<< poissonSolver->
+      \hyperlink{classPoissonSolver3DCylindricalGPU_a82ad65b31daff47f33c7c7fb8ad95e81}{fIterations} << \textcolor{charliteral}{'\(\backslash\)n'};
+120     std::cout<<\textcolor{stringliteral}{"Iterasi\(\backslash\)tError Convergen\(\backslash\)t\(\backslash\)tError Absolut \(\backslash\)n"};
+121     std::cout<< std::scientific;
+122     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<poissonSolver->\hyperlink{classPoissonSolver3DCylindricalGPU_a82ad65b31daff47f33c7c7fb8ad95e81}{fIterations};i++) \{
+123         std::cout<<\textcolor{stringliteral}{"["} <<  i  << \textcolor{stringliteral}{"]:\(\backslash\)t"} << poissonSolver->GetErrorConv(i) << \textcolor{stringliteral}{"\(\backslash\)t"} << poissonSolver->
+      GetErrorExact(i) << \textcolor{charliteral}{'\(\backslash\)n'} << std::scientific;
+124     \}
+125     \textcolor{keyword}{delete} poissonSolver;
+126     \textcolor{keyword}{delete} VPotential;
+127     \textcolor{keyword}{delete} VPotentialExact;
+128     \textcolor{keyword}{delete} RhoCharge;
+129 \}
+\end{DoxyCode}
